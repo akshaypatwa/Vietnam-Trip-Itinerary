@@ -164,7 +164,7 @@ const getActivityVisuals = (activity: string) => {
     if (lower.includes('flight to da nang')) return { type: 'MAJOR_TRAVEL', icon: <FlightIcon/>, details: 'Flight to Danang'};
     if (lower.includes('sapa night bus')) return { type: 'MAJOR_TRAVEL', icon: <CarIcon/>, details: 'VIP Cabin Bus to Sapa'};
     
-    if (lower.includes('dinner cruise')) return { type: 'HIGHLIGHT', icon: <BoatIcon/>, title: 'Dinner Cruise on Saigon River' };
+    if (lower.includes('dinner cruise')) return { type: 'HIGHLIGHT', icon: <BoatIcon/>, title: 'Dinner Cruise on the Saigon River' };
     if (lower.includes('my son sanctuary')) return { type: 'HIGHLIGHT', icon: <PagodaIcon/>, title: 'My Son Sanctuary (World Heritage)' };
     if (lower.includes('golden bridge')) return { type: 'HIGHLIGHT', icon: <LandmarkIcon/>, title: 'Iconic: Golden Bridge Walk' };
     if (lower.includes('coconut forest')) return { type: 'HIGHLIGHT', icon: <BoatIcon/>, title: 'Basket Boat Trip in Coconut Forest' };
