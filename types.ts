@@ -14,6 +14,8 @@ export interface GuestDetails {
   numberOfGuests: string;
   nationality: string;
   transferVehicle: string;
+  tourCode: string;
+  phone: string;
 }
 
 export interface DayPlan {
@@ -25,19 +27,28 @@ export interface DayPlan {
   inclusions: string[];
   imageUrl: string;
   coords: [number, number];
+  isHighlight?: boolean;
+  bannerSummary?: string;
   outfitSuggestion?: {
     title: string;
     points: string[];
   };
 }
 
-export interface Accommodation {
-  category: string;
-  hotels: {
+export interface HotelStay {
     city: string;
     name: string;
-    roomType: string;
-  }[];
+    bookingUrl: string;
+    dates: string;
+    nights: string;
+    rooms: string;
+    coversDays: string;
+    notes?: string;
+}
+
+export interface Accommodation {
+  category: string;
+  hotels: HotelStay[];
 }
 
 export interface TourCost {

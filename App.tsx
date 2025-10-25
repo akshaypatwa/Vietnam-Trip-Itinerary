@@ -1,7 +1,9 @@
+
+
 import React, { useState, useEffect, useRef } from 'react';
 import L from 'leaflet';
 import { TRIP_DATA, CURRENCY_RATES } from './constants';
-import type { DayPlan, TourOverview, GuestDetails, Accommodation, TourCost, InclusionsExclusions, TermsAndConditions, FlightData, VisaInfo } from './types';
+import type { DayPlan, TourOverview, GuestDetails, Accommodation, TourCost, InclusionsExclusions, TermsAndConditions, FlightData, VisaInfo, HotelStay } from './types';
 
 // --- HELPERS ---
 const numberToWords = (num: number, currency: string): string => {
@@ -107,6 +109,7 @@ const AnimatedSection: React.FC<{ children: React.ReactNode; className?: string;
 
 
 // --- SVG IONS ---
+const StarIcon = ({ className = "w-6 h-6" }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}><path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.116 3.552 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.552c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clipRule="evenodd" /></svg>;
 const MapPinIcon = ({ className = "w-5 h-5" }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}><path fillRule="evenodd" d="M11.54 22.35a.75.75 0 01-1.08 0l-6.75-6.75a.75.75 0 01.04-1.12l6.75-6.75a.75.75 0 011.08 0l6.75 6.75a.75.75 0 01.04 1.12l-6.75 6.75zM12 13.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" clipRule="evenodd" /></svg>;
 const CheckCircleIcon = ({ className = "w-6 h-6" }: { className?: string }) => (<svg xmlns="http://www.w3.org/2000/svg" className={`${className}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>);
 const CarIcon = ({className="w-5 h-5"}: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-1h12v1a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>;
@@ -143,6 +146,11 @@ const PassportStampIcon = ({ className = "w-16 h-16" }: { className?: string }) 
 const WalletIcon = ({ className = "w-6 h-6" }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}><path d="M18 4H6C3.79 4 2 5.79 2 8v8c0 2.21 1.79 4 4 4h12c2.21 0 4-1.79 4-4V8c0-2.21-1.79-4-4-4zm-1 11h-4c-.55 0-1-.45-1-1s.45-1 1-1h4c.55 0 1 .45 1 1s-.45 1-1 1zm3-4H4V8c0-1.1.9-2 2-2h12c1.1 0 2 .9 2 2v3z" /></svg>;
 const CalendarDaysIcon = ({ className = "w-6 h-6" }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 002 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM7 12h5v5H7z" /></svg>;
 const ExclamationTriangleIcon = ({ className = "w-6 h-6" }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" /></svg>;
+const LinkIcon = ({ className = "w-4 h-4" }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={className}><path d="M12.232 4.232a2.5 2.5 0 013.536 3.536l-1.225 1.224a.75.75 0 001.061 1.06l1.224-1.224a4 4 0 00-5.656-5.656l-3 3a4 4 0 00.225 5.865.75.75 0 00.977-1.138 2.5 2.5 0 01-.142-3.665l3-3z" /><path d="M8.603 14.53a2.5 2.5 0 01-3.536-3.536l1.225-1.224a.75.75 0 00-1.061-1.06l-1.224 1.224a4 4 0 005.656 5.656l3-3a4 4 0 00-.225-5.865.75.75 0 00-.977 1.138 2.5 2.5 0 01.142 3.665l-3 3z" /></svg>;
+const ClipboardListIcon = ({ className = "w-5 h-5" }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={className}><path fillRule="evenodd" d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2H4zm3 2h6v2H7V4zm0 4h6v2H7V8zm0 4h6v2H7v-2z" clipRule="evenodd" /></svg>;
+const ClockIcon = ({ className = "w-6 h-6" }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+const ChevronDownIcon = ({ className = "w-5 h-5" }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>;
+
 
 // --- Currency Flags ---
 const UsaFlagIcon = ({ className = "w-6 h-5 rounded-sm" }: { className?: string }) => (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 48" className={className}><path fill="#b22234" d="M0 0h72v48H0z"/><path fill="#fff" d="M0 4h72v4H0zm0 8h72v4H0zm0 8h72v4H0zm0 8h72v4H0zm0 8h72v4H0z"/><path fill="#3c3b6e" d="M0 0h36v28H0z"/><path fill="#fff" d="M6 3.5L4.5 8l-3.5-2.5 4 1-1.5 4 2.5-3.5 2.5 3.5-1.5-4 4-1-3.5 2.5zm12 0L16.5 8l-3.5-2.5 4 1-1.5 4 2.5-3.5 2.5 3.5-1.5-4 4-1-3.5 2.5zm12 0L28.5 8l-3.5-2.5 4 1-1.5 4 2.5-3.5 2.5 3.5-1.5-4 4-1-3.5 2.5zM6 10.5l-1.5 4.5-3.5-2.5 4 1-1.5 4 2.5-3.5 2.5 3.5-1.5-4 4-1-3.5 2.5zm12 0l-1.5 4.5-3.5-2.5 4 1-1.5 4 2.5-3.5 2.5 3.5-1.5-4 4-1-3.5 2.5zm12 0l-1.5 4.5-3.5-2.5 4 1-1.5 4 2.5-3.5 2.5 3.5-1.5-4 4-1-3.5 2.5zM6 17.5l-1.5 4.5-3.5-2.5 4 1-1.5 4 2.5-3.5 2.5 3.5-1.5-4 4-1-3.5 2.5zm12 0l-1.5 4.5-3.5-2.5 4 1-1.5 4 2.5-3.5 2.5 3.5-1.5-4 4-1-3.5 2.5zm12 0l-1.5 4.5-3.5-2.5 4 1-1.5 4 2.5-3.5 2.5 3.5-1.5-4 4-1-3.5 2.5z"/></svg>);
@@ -200,7 +208,7 @@ const InteractiveMap: React.FC<{
             });
             mapRef.current = map;
 
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
             }).addTo(map);
 
@@ -213,7 +221,7 @@ const InteractiveMap: React.FC<{
                 const latLng = L.latLng(plan.coords[0], plan.coords[1]);
                 
                 const isActive = openDay === plan.day;
-                const iconHtml = `<div class="font-bold font-sans text-sm transition-all duration-300 ${isActive ? 'bg-brand-accent text-white scale-125' : 'bg-white text-brand-accent'} w-8 h-8 rounded-full flex items-center justify-center shadow-lg border-2 border-white">${plan.day}</div>`;
+                const iconHtml = `<div class="font-bold font-sans text-sm transition-all duration-300 ${isActive ? 'bg-brand-accent text-white scale-125 animate-pulse-slow shadow-2xl' : 'bg-white text-brand-accent opacity-80'} w-8 h-8 rounded-full flex items-center justify-center shadow-lg border-2 border-white">${plan.day}</div>`;
                 
                 const customIcon = L.divIcon({
                     html: iconHtml,
@@ -239,7 +247,7 @@ const InteractiveMap: React.FC<{
                  map.fitBounds(markerGroup.getBounds(), { padding: [50, 50] });
             }
            
-            L.polyline(polylineCoords, { color: 'rgba(231, 111, 81, 0.7)', weight: 3, dashArray: '5, 10' }).addTo(map);
+            L.polyline(polylineCoords, { color: 'rgba(231, 111, 81, 0.9)', weight: 4, dashArray: '8, 8' }).addTo(map);
         }
 
         return () => {
@@ -257,7 +265,7 @@ const InteractiveMap: React.FC<{
             if (!marker) return;
             const day = index + 1;
             const isActive = openDay === day;
-            const iconHtml = `<div class="font-bold font-sans text-sm transition-all duration-300 ${isActive ? 'bg-brand-accent text-white scale-125 animate-pulse-slow' : 'bg-white text-brand-accent'} w-8 h-8 rounded-full flex items-center justify-center shadow-lg border-2 border-white">${day}</div>`;
+            const iconHtml = `<div class="font-bold font-sans text-sm transition-all duration-300 ${isActive ? 'bg-brand-accent text-white scale-125 animate-pulse-slow shadow-2xl' : 'bg-white text-brand-accent opacity-80'} w-8 h-8 rounded-full flex items-center justify-center shadow-lg border-2 border-white">${day}</div>`;
             marker.setIcon(L.divIcon({
                 html: iconHtml,
                 className: '',
@@ -294,9 +302,12 @@ const InteractiveMap: React.FC<{
     return (
         <div className="p-1 bg-gradient-to-br from-brand-sky via-brand-sun to-brand-accent rounded-2xl shadow-lg">
             <div className="relative bg-white rounded-xl overflow-hidden">
-                <div className="p-4 bg-gray-50/70 border-b flex items-center">
-                    <MapPinIcon className="w-6 h-6 text-brand-jungle mr-3" />
-                    <h2 className="text-2xl font-bold font-handwriting text-brand-charcoal">Trip Route</h2>
+                 <div className="p-4 bg-gray-50/70 border-b">
+                    <div className="flex items-center">
+                        <MapPinIcon className="w-6 h-6 text-brand-jungle mr-3" />
+                        <h2 className="text-2xl font-bold font-handwriting text-brand-charcoal">Trip Route</h2>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1 ml-9">Click a number on the map to jump to that day's plan.</p>
                 </div>
                 <div ref={mapContainerRef} className="h-64 md:h-80 w-full" />
             </div>
@@ -505,32 +516,95 @@ const OutfitSuggestion: React.FC<{ suggestion: DayPlan['outfitSuggestion'] }> = 
     );
 };
 
-const DayAccordion: React.FC<{ dayPlan: DayPlan; isOpen: boolean; onClick: () => void; prevDestination: string | null; shortDate: string; fullDate: string; }> = ({ dayPlan, isOpen, onClick, prevDestination, shortDate, fullDate }) => {
+const DayUseHotelInfo: React.FC<{ hotel: HotelStay }> = ({ hotel }) => {
+    return (
+        <div className="p-4 mb-6 rounded-lg bg-blue-50 border border-blue-200 flex items-start">
+            <ClockIcon className="w-8 h-8 text-blue-600 mr-4 flex-shrink-0 mt-1" />
+            <div>
+                <p className="font-bold text-blue-700 text-sm">Day Use Hotel</p>
+                <a href={hotel.bookingUrl} target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-2">
+                    <h4 className="font-sans font-bold text-xl text-brand-accent group-hover:text-brand-accent/80 transition-colors">{hotel.name}</h4>
+                    <LinkIcon className="w-4 h-4 text-brand-accent/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </a>
+                <p className="text-sm text-gray-600">in {hotel.city}</p>
+                <p className="text-sm text-gray-600 mt-1">{hotel.rooms}</p>
+            </div>
+        </div>
+    );
+};
+
+const HotelTimelineInfo: React.FC<{ hotel: HotelStay }> = ({ hotel }) => {
+    return (
+        <div className="p-4 mb-6 rounded-lg bg-brand-sand/70 border border-brand-jungle/20 flex items-start">
+            <BedIcon className="w-8 h-8 text-brand-jungle mr-4 flex-shrink-0 mt-1" />
+            <div>
+                <p className="font-bold text-brand-jungle text-sm">Tonight's Accommodation</p>
+                <a href={hotel.bookingUrl} target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-2">
+                    <h4 className="font-sans font-bold text-xl text-brand-accent group-hover:text-brand-accent/80 transition-colors">{hotel.name}</h4>
+                    <LinkIcon className="w-4 h-4 text-brand-accent/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </a>
+                <p className="text-sm text-gray-600">in {hotel.city}</p>
+            </div>
+        </div>
+    );
+};
+
+
+const DayAccordion: React.FC<{ dayPlan: DayPlan; isOpen: boolean; onClick: () => void; prevDestination: string | null; shortDate: string; weekday: string; }> = ({ dayPlan, isOpen, onClick, prevDestination, shortDate, weekday }) => {
     const meals = dayPlan.meals.split(',').map(m => m.trim()).filter(Boolean);
-    const [dateNum, dateMon] = shortDate.split(' ');
+    const mealMap: { [key: string]: string } = { 'B': 'Breakfast', 'L': 'Lunch', 'D': 'Dinner' };
+    const [dateMon, dateNum] = shortDate.split(' ');
+
+    const hasOvernightTravel = dayPlan.activities.some(activity => 
+        activity.toLowerCase().includes('overnight trip') || 
+        activity.toLowerCase().includes('night bus')
+    );
+
+    const overnightHotelForThisDay = TRIP_DATA.accommodation.hotels.find(hotel => {
+        const daysCovered = hotel.coversDays.match(/\d+/g);
+        const isOvernightStay = hotel.nights.toLowerCase() !== 'day use';
+        return daysCovered ? daysCovered.includes(String(dayPlan.day)) && isOvernightStay : false;
+    });
+    
+    const dayUseHotelForThisDay = TRIP_DATA.accommodation.hotels.find(hotel => {
+        const daysCovered = hotel.coversDays.match(/\d+/g);
+        const isDayUse = hotel.nights.toLowerCase() === 'day use';
+        return daysCovered ? daysCovered.includes(String(dayPlan.day)) && isDayUse : false;
+    });
 
     return (
         <div className={`transition-all duration-500 ${isOpen ? 'pb-4' : ''}`}>
-            <div className={`relative bg-white p-2.5 rounded-2xl shadow-lg transition-all duration-500 transform-preserve-3d ${isOpen ? '[transform:rotateX(5deg)]' : 'hover:shadow-xl'}`}>
-                <button onClick={onClick} className="w-full text-left relative block group" aria-expanded={isOpen}>
-                    <div className="relative h-40 rounded-lg overflow-hidden">
-                        <img 
-                            src={dayPlan.imageUrl} 
-                            alt={dayPlan.title} 
-                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110" 
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
-                         <div className="absolute top-3 left-3 bg-white/80 backdrop-blur-sm text-brand-charcoal rounded-lg px-3 py-1 text-center shadow-md">
-                            <p className="font-bold text-sm leading-none">{dateMon}</p>
-                            <p className="font-extrabold text-2xl leading-none">{dateNum}</p>
+            <div className={`bg-white rounded-2xl shadow-lg transition-all duration-500 transform-preserve-3d ${isOpen ? '[transform:rotateX(5deg)]' : 'hover:shadow-xl'}`}>
+                <button onClick={onClick} className="w-full text-left relative block group rounded-2xl overflow-hidden" aria-expanded={isOpen}>
+                    {/* Background Image & Overlay */}
+                    <img
+                        src={dayPlan.imageUrl}
+                        alt={dayPlan.title}
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent"></div>
+
+                    {/* Content */}
+                    <div className="relative flex items-center justify-between gap-4 p-4 min-h-[7.5rem]">
+                        {/* Left: Text Info */}
+                        <div className="text-white flex-grow pr-24" style={{ textShadow: '2px 2px 5px rgba(0,0,0,0.8)' }}>
+                            <p className="font-bold text-xs uppercase tracking-wider opacity-90">{`Day ${dayPlan.day} - ${weekday}`}</p>
+                            <p className="text-2xl lg:text-3xl font-script leading-tight text-brand-sun">{dayPlan.destination}</p>
+                            {dayPlan.bannerSummary && (
+                                <p className="text-xs lg:text-sm font-sans font-semibold mt-1 tracking-wide">{dayPlan.bannerSummary}</p>
+                            )}
                         </div>
-                    </div>
-                    <div className="absolute bottom-5 left-5 text-white pr-4">
-                       <p className="text-xs font-bold uppercase tracking-wider opacity-90">{`Day ${dayPlan.day} • ${dayPlan.destination}`}</p>
-                       <h3 className="text-lg font-bold font-handwriting mt-1 leading-tight text-brand-sun">{dayPlan.title}</h3>
-                    </div>
-                    <div className={`absolute top-4 right-4 p-2 rounded-full transform transition-all duration-300 ease-in-out ${isOpen ? 'rotate-180 bg-white/30' : 'bg-white/20 group-hover:bg-white/40'}`}>
-                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+
+                        {/* Right: Date & Chevron */}
+                        <div className="absolute top-1/2 right-3 sm:right-4 -translate-y-1/2 flex items-center gap-2 sm:gap-4">
+                            <div className="text-white text-right transition-transform duration-300 group-hover:scale-110">
+                                <p className="font-extrabold font-sans text-2xl leading-none" style={{ textShadow: '1px 2px 4px rgba(0,0,0,0.8)' }}>{dateNum}</p>
+                                <p className="font-bold font-sans text-xs leading-none tracking-wider uppercase" style={{ textShadow: '1px 2px 4px rgba(0,0,0,0.8)' }}>{dateMon}</p>
+                            </div>
+                            <div className={`p-1 transition-transform duration-300 ease-in-out ${isOpen ? 'rotate-180' : ''}`}>
+                                <svg className="w-8 h-8 text-white/80" style={{ filter: 'drop-shadow(1px 2px 4px rgba(0,0,0,0.8))' }} fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+                            </div>
+                        </div>
                     </div>
                 </button>
             </div>
@@ -540,9 +614,35 @@ const DayAccordion: React.FC<{ dayPlan: DayPlan; isOpen: boolean; onClick: () =>
                     <div className="p-6 bg-white rounded-b-2xl shadow-inner-lg -mt-2 relative">
                          {isOpen && <div className="absolute top-4 right-4 text-brand-accent/50 opacity-0 animate-stamp-in"><PassportStampIcon/></div>}
                         <div className="text-center mb-6 border-b pb-4">
-                           <p className="font-handwriting text-3xl text-brand-charcoal">{fullDate}</p>
+                            <div className="flex items-center justify-center gap-2 mt-2 px-4">
+                                {dayPlan.isHighlight && (
+                                    <div className="text-yellow-400 animate-point-and-shake flex-shrink-0" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.5))' }}>
+                                        <StarIcon className="w-6 h-6" />
+                                    </div>
+                                )}
+                                <h3 className="text-base font-bold font-sans text-brand-charcoal/90">{dayPlan.title}</h3>
+                            </div>
                         </div>
                         <TravelStatusHeader currentDestination={dayPlan.destination} prevDestination={prevDestination} />
+                        
+                        {isOpen && dayUseHotelForThisDay && (
+                            <div 
+                                className={`transition-all duration-500 transform ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+                                style={{ transitionDelay: '50ms' }}
+                            >
+                                <DayUseHotelInfo hotel={dayUseHotelForThisDay} />
+                            </div>
+                        )}
+                        
+                        {isOpen && overnightHotelForThisDay && !hasOvernightTravel && (
+                            <div 
+                                className={`transition-all duration-500 transform ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+                                style={{ transitionDelay: '100ms' }}
+                            >
+                                <HotelTimelineInfo hotel={overnightHotelForThisDay} />
+                            </div>
+                        )}
+
                         <div className="grid md:grid-cols-3 gap-6">
                             <div className="md:col-span-2">
                                 <h4 className="text-xl font-bold mb-4 text-brand-charcoal">Daily Activities</h4>
@@ -552,7 +652,9 @@ const DayAccordion: React.FC<{ dayPlan: DayPlan; isOpen: boolean; onClick: () =>
                                 <div>
                                     <h4 className="text-lg font-bold mb-2 text-brand-charcoal">Meals Included</h4>
                                     <div className="p-3 bg-brand-sand rounded-md border text-sm text-gray-600">
-                                        {meals.length > 0 && meals[0] !== 'None' ? `${meals.join(', ')}` : 'Fuel up on your own!'}
+                                        {meals.length > 0 && meals[0] !== 'None'
+                                            ? meals.map(m => mealMap[m] || m).join(', ')
+                                            : 'Meals are not included today. Time for some local food exploration!'}
                                     </div>
                                 </div>
                                 <div>
@@ -595,25 +697,25 @@ const CurrencyInput = ({
 }) => (
     <div>
         <div className="relative">
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 gap-2">
+            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2 gap-2">
                 {flagIcon}
                 <span className="text-gray-500 sm:text-sm">{symbol}</span>
             </div>
             <input
                 type="number"
                 name={name}
-                className="block w-full rounded-md border-0 bg-white py-2.5 pl-14 pr-12 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand-jungle sm:text-sm"
+                className="block w-full rounded-md border-0 bg-white py-2 pl-12 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand-jungle sm:text-sm"
                 placeholder={name === 'vnd' ? '0' : '0.00'}
                 value={value}
                 onChange={onChange}
                 aria-label={`${name.toUpperCase()} Amount`}
                 min="0"
             />
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                 <span className="text-gray-500 sm:text-sm font-bold">{name.toUpperCase()}</span>
             </div>
         </div>
-        <div className="mt-2 text-xs italic text-brand-charcoal/80 h-12 flex items-center justify-center text-center px-1">
+        <div className="mt-1 text-xs italic text-brand-charcoal/80 h-8 flex items-center justify-center text-center px-1">
             {word}
         </div>
     </div>
@@ -622,6 +724,7 @@ const CurrencyInput = ({
 const CurrencyConverter: React.FC = () => {
     const [values, setValues] = useState({ usd: '', inr: '', vnd: '' });
     const [wordRepresentations, setWordRepresentations] = useState({ usd: '', inr: '', vnd: '' });
+    const [isExpanded, setIsExpanded] = useState(false);
 
     const handleConversion = (value: string, from: 'usd' | 'inr' | 'vnd') => {
         const cleanedValue = value.replace(/[^0-9.]/g, '');
@@ -667,12 +770,25 @@ const CurrencyConverter: React.FC = () => {
 
     return (
         <div className="p-1 bg-gradient-to-br from-brand-sky via-brand-sun to-brand-accent rounded-2xl shadow-lg">
-            <div className="relative bg-white rounded-xl p-6">
-                <h3 className="text-center font-bold font-handwriting text-brand-charcoal mb-4 text-2xl">Quick Currency Converter</h3>
-                <div className="grid sm:grid-cols-3 gap-4">
-                    <CurrencyInput name="usd" symbol="$" value={values.usd} word={wordRepresentations.usd} onChange={(e) => handleConversion(e.target.value, 'usd')} flagIcon={<UsaFlagIcon />} />
-                    <CurrencyInput name="inr" symbol="₹" value={values.inr} word={wordRepresentations.inr} onChange={(e) => handleConversion(e.target.value, 'inr')} flagIcon={<IndiaFlagIcon />} />
-                    <CurrencyInput name="vnd" symbol="₫" value={values.vnd} word={wordRepresentations.vnd} onChange={(e) => handleConversion(e.target.value, 'vnd')} flagIcon={<VietnamFlagIcon />} />
+            <div className="relative bg-white rounded-xl p-4 pb-5">
+                <h3 className="text-center font-bold font-handwriting text-brand-charcoal mb-3 text-xl">Currency Converter</h3>
+                <div className={`grid ${isExpanded ? 'grid-cols-1 sm:grid-cols-3' : 'grid-cols-2'} gap-2 sm:gap-2`}>
+                    <CurrencyInput name="vnd" symbol="₫" value={values.vnd} word={wordRepresentations.vnd} onChange={(e) => handleConversion(e.target.value, 'vnd')} flagIcon={<VietnamFlagIcon className="w-5 h-4 rounded-sm" />} />
+                    {isExpanded && (
+                        <div className="transition-opacity duration-500">
+                             <CurrencyInput name="usd" symbol="$" value={values.usd} word={wordRepresentations.usd} onChange={(e) => handleConversion(e.target.value, 'usd')} flagIcon={<UsaFlagIcon className="w-5 h-4 rounded-sm" />} />
+                        </div>
+                    )}
+                    <CurrencyInput name="inr" symbol="₹" value={values.inr} word={wordRepresentations.inr} onChange={(e) => handleConversion(e.target.value, 'inr')} flagIcon={<IndiaFlagIcon className="w-5 h-4 rounded-sm" />} />
+                </div>
+                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2">
+                    <button 
+                        onClick={() => setIsExpanded(!isExpanded)} 
+                        className="w-8 h-8 bg-white rounded-full shadow-lg border flex items-center justify-center text-gray-500 hover:bg-gray-100 hover:text-brand-jungle focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-brand-jungle transition-all duration-300"
+                        aria-label={isExpanded ? "Show fewer currencies" : "Show more currencies"}
+                    >
+                        <ChevronDownIcon className={`w-5 h-5 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
+                    </button>
                 </div>
             </div>
         </div>
@@ -722,13 +838,13 @@ const FlightTicketsSection: React.FC<{ flightData: FlightData; isOpen: boolean; 
                                         </button>
                                         <div className={`grid w-full transition-all duration-300 ease-in-out ${isRouteExpanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
                                             <div className="overflow-hidden">
-                                                <div className="flex flex-wrap items-center justify-center gap-3 pt-4">
+                                                <div className="flex flex-wrap items-center justify-center gap-2 pt-4">
                                                     {routeData.tickets.map((ticket, tIndex) => (
                                                         <a
                                                             key={tIndex} href={ticket.url} target="_blank" rel="noopener noreferrer"
-                                                            className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-brand-jungle text-white font-bold text-sm shadow-md border-2 border-transparent hover:bg-brand-sun hover:text-brand-jungle transform transition-all duration-300 ease-in-out hover:scale-105 group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-sun"
+                                                            className="inline-flex items-center justify-center px-3 py-1.5 rounded-full bg-brand-jungle text-white font-bold text-xs shadow-md border-2 border-transparent hover:bg-brand-sun hover:text-brand-jungle transform transition-all duration-300 ease-in-out hover:scale-105 group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-sun"
                                                         >
-                                                            <TicketIcon className="mr-2 h-5 w-5 opacity-80 group-hover:text-brand-jungle transition-colors flex-shrink-0" />
+                                                            <TicketIcon className="mr-2 h-4 w-4 opacity-80 group-hover:text-brand-jungle transition-colors flex-shrink-0" />
                                                             <span>{ticket.passengers}</span>
                                                         </a>
                                                     ))}
@@ -756,17 +872,17 @@ const VisaSection: React.FC<{ visaData: VisaInfo[]; isOpen: boolean; onClose: ()
                             <XMarkIcon className="w-5 h-5" />
                         </button>
                         <h3 className="text-center font-bold font-handwriting text-brand-charcoal mb-4 text-2xl">Vietnam E-Visas</h3>
-                        <div className="flex flex-wrap items-center justify-center gap-3">
+                        <div className="flex flex-wrap items-center justify-center gap-2">
                             {visaData.map((visa, index) => (
                                 <a
                                     key={index}
                                     href={visa.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className={`inline-flex items-center justify-center px-4 py-2 rounded-full bg-brand-jungle text-white font-bold text-sm shadow-md border-2 border-transparent hover:bg-brand-sun hover:text-brand-jungle transform transition-all duration-300 ease-in-out hover:scale-105 group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-sun ${isOpen ? 'animate-fade-in-up' : 'opacity-0'}`}
+                                    className={`inline-flex items-center justify-center px-3 py-1.5 rounded-full bg-brand-jungle text-white font-bold text-xs shadow-md border-2 border-transparent hover:bg-brand-sun hover:text-brand-jungle transform transition-all duration-300 ease-in-out hover:scale-105 group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-sun ${isOpen ? 'animate-fade-in-up' : 'opacity-0'}`}
                                     style={{ animationDelay: `${index * 100}ms` }}
                                 >
-                                    <PassportIcon className="mr-2 h-5 w-5 opacity-80 group-hover:text-brand-jungle transition-colors" />
+                                    <PassportIcon className="mr-2 h-4 w-4 opacity-80 group-hover:text-brand-jungle transition-colors" />
                                     <span>{visa.name}</span>
                                 </a>
                             ))}
@@ -780,17 +896,54 @@ const VisaSection: React.FC<{ visaData: VisaInfo[]; isOpen: boolean; onClose: ()
 
 const AccommodationDetails: React.FC<{ accommodation: Accommodation }> = ({ accommodation }) => (
     <Section mainTitle="Your Cozy" scriptTitle="Hideaways" icon={<BuildingOfficeIcon />}>
-        <p className="mb-6 text-gray-600 text-center">Your home away from home will be in cozy <strong>{accommodation.category}</strong> Hotels.</p>
-        <div className="grid md:grid-cols-2 gap-4">
+        <p className="mb-8 text-gray-600 text-center">Your home away from home will be in these lovely <strong>{accommodation.category}</strong> hotels.</p>
+        <div className="space-y-6">
             {accommodation.hotels.map((hotel, index) => (
-                <div key={index} className="p-4 bg-brand-sand/70 rounded-lg border border-brand-jungle/10 flex items-start space-x-4">
-                     <div className="flex-shrink-0 w-10 h-10 rounded-full bg-brand-jungle/10 text-brand-jungle flex items-center justify-center">
-                        <BuildingOfficeIcon className="w-6 h-6" />
+                <div key={index} className="p-4 bg-brand-sand/60 rounded-xl shadow-md border border-brand-jungle/10 transition-shadow hover:shadow-lg">
+                    <div className="sm:flex sm:items-start sm:justify-between">
+                        <div>
+                            <div className="flex items-center mb-1">
+                                <MapPinIcon className="w-5 h-5 text-brand-jungle mr-2" />
+                                <h3 className="font-bold text-base text-brand-jungle tracking-wide uppercase">{hotel.city}</h3>
+                            </div>
+                            <a href={hotel.bookingUrl} target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-2">
+                                <h4 className="font-script text-2xl text-brand-accent group-hover:text-brand-accent/80 transition-colors">{hotel.name}</h4>
+                                <LinkIcon className="w-4 h-4 text-brand-accent/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                            </a>
+                        </div>
+                        <div className="mt-3 sm:mt-0 sm:text-right flex-shrink-0">
+                             <div className="flex items-center justify-start sm:justify-end">
+                                <CalendarDaysIcon className="w-4 h-4 text-brand-charcoal/70 mr-2" />
+                                <p className="text-sm font-semibold text-brand-charcoal/90">{hotel.dates}</p>
+                             </div>
+                             <p className="text-xs text-gray-600 sm:ml-6">{hotel.nights}</p>
+                        </div>
                     </div>
-                    <div>
-                        <p className="font-bold text-brand-charcoal">{hotel.city}</p>
-                        <p className="text-sm text-gray-700">{hotel.name}</p>
-                        <p className="text-xs text-gray-500 italic mt-1">{hotel.roomType}</p>
+                   
+                    <div className="mt-4 border-t border-brand-jungle/10 pt-4 space-y-3">
+                        <div className="flex items-start">
+                            <BedIcon className="w-5 h-5 text-brand-charcoal/70 mr-3 mt-0.5 flex-shrink-0" />
+                            <div>
+                                <p className="font-semibold text-brand-charcoal/90 text-sm">Room Details</p>
+                                <p className="text-sm text-gray-600">{hotel.rooms}</p>
+                            </div>
+                        </div>
+                        <div className="flex items-start">
+                            <ClipboardListIcon className="w-5 h-5 text-brand-charcoal/70 mr-3 mt-0.5 flex-shrink-0" />
+                             <div>
+                                <p className="font-semibold text-brand-charcoal/90 text-sm">Covers Itinerary</p>
+                                <p className="text-sm text-gray-600">{hotel.coversDays}</p>
+                            </div>
+                        </div>
+                        {hotel.notes && (
+                            <div className="flex items-start p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                                <InformationCircleIcon className="w-5 h-5 text-yellow-600 mr-3 mt-0.5 flex-shrink-0" />
+                                <div>
+                                    <p className="font-semibold text-yellow-800 text-sm">Special Note</p>
+                                    <p className="text-sm text-yellow-700">{hotel.notes}</p>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             ))}
@@ -805,7 +958,7 @@ const TourCostDetails: React.FC<{ tourCost: TourCost }> = ({ tourCost }) => (
             {tourCost.costs.map((cost, index) => (
                 <div key={index} className="flex flex-col sm:flex-row justify-between sm:items-center gap-2 text-center sm:text-left p-4 bg-brand-sand/70 rounded-lg border border-brand-jungle/10">
                     <span className="text-gray-700 font-semibold">{cost.description}</span>
-                    <span className="font-bold text-base text-white bg-brand-accent px-3 py-1 rounded-full shadow-sm whitespace-nowrap">{cost.price}</span>
+                    <span className="font-bold text-base sm:text-lg text-white bg-brand-accent px-4 py-1.5 rounded-full shadow-sm whitespace-nowrap">{cost.price}</span>
                 </div>
             ))}
          </div>
@@ -869,6 +1022,76 @@ const TermsAndConditionsDetails: React.FC<{ data: TermsAndConditions }> = ({ dat
     </Section>
 );
 
+const TravelersGuide: React.FC = () => (
+    <Section mainTitle="Traveler's" scriptTitle="Guidebook" icon={<SuitcaseIcon />}>
+        <div className="grid md:grid-cols-2 gap-8">
+            {/* What to Carry */}
+            <div className="p-4 bg-brand-sand/60 rounded-xl border border-brand-jungle/10">
+                <h3 className="text-lg font-bold mb-3 text-brand-jungle flex items-center">
+                    <CheckCircleIcon className="w-6 h-6 mr-2 text-emerald-500" />
+                    What to Pack: The Essentials
+                </h3>
+                <ul className="space-y-2 text-sm text-gray-700">
+                    {[
+                        "Lightweight clothing (cotton/linen)",
+                        "Rain jacket or compact umbrella",
+                        "Swimsuit for Halong Bay & beaches",
+                        "Comfortable walking shoes & sandals",
+                        "Sun protection: hat, sunglasses, sunscreen",
+                        "Insect repellent (especially for rural areas)",
+                        "Basic first-aid kit & personal meds",
+                        "Passport, visa, and travel insurance docs",
+                        "Power bank & universal adapter (Type A/C)",
+                        "Reusable water bottle to stay hydrated",
+                    ].map((item, index) => (
+                        <li key={index} className="flex items-start">
+                           <span className="mr-2 mt-1 text-brand-accent">▸</span>
+                           <span>{item}</span>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+            {/* Do's and Don'ts */}
+            <div className="space-y-6">
+                <div className="p-4 bg-emerald-50/50 rounded-lg border border-emerald-200">
+                    <h3 className="text-lg font-semibold mb-3 text-emerald-700">Do's: Embrace the Culture</h3>
+                    <ul className="space-y-2 text-sm text-gray-700">
+                        {[
+                            "Dress modestly when visiting temples.",
+                            "Bargain with a smile at local markets.",
+                            "Try the street food from busy stalls.",
+                            "Learn basic phrases: 'Xin chào' (Hello), 'Cảm ơn' (Thank you).",
+                            "Be extremely cautious when crossing streets.",
+                        ].map((item, index) => (
+                             <li key={index} className="flex items-start">
+                                <CheckCircleIcon className="w-5 h-5 flex-shrink-0 mr-2 mt-0.5 text-emerald-500" />
+                                <span>{item}</span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                <div className="bg-red-50/50 p-4 rounded-lg border border-red-200">
+                     <h3 className="text-lg font-semibold mb-3 text-red-700">Don'ts: Cultural Courtesy</h3>
+                     <ul className="space-y-2 text-sm text-gray-700">
+                        {[
+                            "Don't drink tap water; use bottled water.",
+                            "Avoid taking photos of military sites.",
+                            "Don't touch anyone's head or pass items over it.",
+                            "Refrain from public displays of affection.",
+                            "Never lose your temper publicly.",
+                        ].map((item, index) => (
+                             <li key={index} className="flex items-start">
+                                <XCircleIcon className="w-5 h-5 flex-shrink-0 mr-2 mt-0.5" />
+                                <span>{item}</span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </Section>
+);
+
 const FunSection: React.FC = () => {
     return (
         <Section mainTitle="Your Fun" scriptTitle="Survival Kit" icon={<SparklesIcon/>}>
@@ -883,6 +1106,7 @@ const FunSection: React.FC = () => {
                     <div className="p-4 bg-brand-sand rounded-lg transform rotate-1 hover:rotate-0 transition-transform duration-300">
                         <h3 className="font-bold text-brand-jungle">Traveler's Joke</h3>
                         <p className="text-lg my-2 text-brand-charcoal">Why did the tourist get kicked out of the noodle shop?</p>
+
                         <p className="text-sm text-gray-600">For trying to pay with a credit <i className="font-semibold">pho</i>-ne!</p>
                     </div>
                     <div className="p-4 bg-brand-sand rounded-lg transform -rotate-1 hover:rotate-0 transition-transform duration-300">
@@ -953,15 +1177,15 @@ const App: React.FC = () => {
                     <AnimatedSection delay={600} className="relative mt-8">
                         <div className="flex flex-wrap items-center justify-center gap-4">
                             <button 
-                                onClick={() => setIsFlightSectionOpen(!isFlightSectionOpen)}
-                                className="inline-flex items-center justify-center px-5 py-2.5 border border-transparent text-base font-semibold rounded-full shadow-lg text-brand-jungle bg-brand-sun hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-brand-sun transition-all duration-300 transform hover:scale-110 active:scale-100"
+                                onClick={() => { setIsFlightSectionOpen(!isFlightSectionOpen); setIsVisaSectionOpen(false); }}
+                                className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-semibold rounded-full shadow-lg text-brand-jungle bg-brand-sun hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-brand-sun transition-all duration-300 transform hover:scale-105 active:scale-100"
                             >
                                 <TicketIcon className="w-5 h-5 mr-2 -ml-1" />
                                 View Flight E-Tickets
                             </button>
                              <button 
-                                onClick={() => setIsVisaSectionOpen(!isVisaSectionOpen)}
-                                className="inline-flex items-center justify-center px-5 py-2.5 border border-transparent text-base font-semibold rounded-full shadow-lg text-brand-jungle bg-brand-sun hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-brand-sun transition-all duration-300 transform hover:scale-110 active:scale-100"
+                                onClick={() => { setIsVisaSectionOpen(!isVisaSectionOpen); setIsFlightSectionOpen(false); }}
+                                className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-semibold rounded-full shadow-lg text-brand-jungle bg-brand-sun hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-brand-sun transition-all duration-300 transform hover:scale-105 active:scale-100"
                             >
                                 <PassportIcon className="w-5 h-5 mr-2 -ml-1" />
                                 View Visa
@@ -977,7 +1201,7 @@ const App: React.FC = () => {
             </header>
 
             <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="relative z-10 -mt-16 mb-8 space-y-4">
+                <div className="relative z-10 -mt-16 mb-8 space-y-1">
                     <FlightTicketsSection flightData={TRIP_DATA.flightData} isOpen={isFlightSectionOpen} onClose={() => setIsFlightSectionOpen(false)} />
                     <VisaSection visaData={TRIP_DATA.visaData} isOpen={isVisaSectionOpen} onClose={() => setIsVisaSectionOpen(false)} />
                 </div>
@@ -986,6 +1210,7 @@ const App: React.FC = () => {
                     <AnimatedSection>
                         <CurrencyConverter />
                     </AnimatedSection>
+                    
                     <AnimatedSection>
                         <InteractiveMap 
                             dayPlans={TRIP_DATA.dayByDay}
@@ -1004,7 +1229,7 @@ const App: React.FC = () => {
                             currentDate.setDate(startDate.getDate() + index);
 
                             const shortDate = currentDate.toLocaleDateString('en-US', { day: '2-digit', month: 'short' }).toUpperCase();
-                            const fullDate = currentDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                            const weekday = currentDate.toLocaleDateString('en-US', { weekday: 'long' });
 
                             return (
                                 <AnimatedSection key={plan.day}>
@@ -1014,7 +1239,7 @@ const App: React.FC = () => {
                                         onClick={() => handleToggle(plan.day)}
                                         prevDestination={prevPlan ? prevPlan.destination : null}
                                         shortDate={shortDate}
-                                        fullDate={fullDate}
+                                        weekday={weekday}
                                     />
                                 </AnimatedSection>
                             )
@@ -1024,6 +1249,7 @@ const App: React.FC = () => {
 
                 <div className="py-10 space-y-8">
                     <AnimatedSection><AccommodationDetails accommodation={TRIP_DATA.accommodation} /></AnimatedSection>
+                    <AnimatedSection><TravelersGuide /></AnimatedSection>
                     <AnimatedSection><TourCostDetails tourCost={TRIP_DATA.tourCost} /></AnimatedSection>
                     <AnimatedSection><InclusionsExclusionsDetails data={TRIP_DATA.generalInclusionsExclusions} /></AnimatedSection>
                     <AnimatedSection><TermsAndConditionsDetails data={TRIP_DATA.termsAndConditions} /></AnimatedSection>
