@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vietnam Trip Itinerary</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Dancing+Script:wght@700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              'sans': ['Nunito', 'sans-serif'],
+              'handwriting': ['Caveat', 'cursive'],
+              'script': ['Dancing Script', 'cursive'],
+            },
+            colors: {
+              'brand-sun': '#FFDE6B', // Sunny Yellow (Lighter)
+              'brand-jungle': '#1E5950', // Deep Jungle Green (Lighter)
+              'brand-sky': '#5DB7DE',   // Sky Blue
+              'brand-sand': '#FFF7E8', // Warm off-white
+              'brand-charcoal': '#2C3E50', // Dark, rich text
+              'brand-accent': '#E76F51', // Accent color
+            },
+            animation: {
+              'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+              'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'shimmer': 'shimmer 2s linear infinite',
+              'flip-in': 'flipIn 0.8s ease-out forwards',
+              'stamp-in': 'stampIn 0.5s ease-out forwards',
+              'point-and-shake': 'pointAndShake 2.5s ease-in-out infinite',
+            },
+            keyframes: {
+              fadeInUp: {
+                '0%': { opacity: '0', transform: 'translateY(25px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              shimmer: {
+                '0%': { backgroundPosition: '200% 0' },
+                '100%': { backgroundPosition: '-200% 0' },
+              },
+              flipIn: {
+                '0%': { transform: 'perspective(1000px) rotateX(-90deg)', opacity: '0' },
+                '100%': { transform: 'perspective(1000px) rotateX(0deg)', opacity: '1' },
+              },
+              stampIn: {
+                '0%': { transform: 'scale(2) rotate(-30deg)', opacity: '0' },
+                '50%': { transform: 'scale(0.9) rotate(5deg)', opacity: '1' },
+                '100%': { transform: 'scale(1) rotate(0deg)', opacity: '1' },
+              },
+              pointAndShake: {
+                '0%, 100%': { transform: 'translateX(0) rotate(0)' },
+                '20%, 60%': { transform: 'translateX(-5px) rotate(-3deg)' },
+                '40%, 80%': { transform: 'translateX(5px) rotate(3deg)' },
+              },
+            }
+          }
+        }
+      }
+    </script>
+
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "leaflet": "https://esm.sh/leaflet@1.9.4"
+  }
+}
+</script>
+  <script type="module" crossorigin src="/Vietnam-Trip-Itinerary/assets/index-Dz-v1XOR.js"></script>
+</head>
+  <body class="bg-brand-sand">
+    <div id="root"></div>
+  </body>
+</html>
