@@ -1,5 +1,6 @@
 
 
+
 import React, { useState, useEffect, useRef } from 'react';
 import L from 'leaflet';
 import { TRIP_DATA, CURRENCY_RATES } from './constants';
@@ -114,9 +115,8 @@ const MapPinIcon = ({ className = "w-5 h-5" }: { className?: string }) => <svg x
 const CheckCircleIcon = ({ className = "w-6 h-6" }: { className?: string }) => (<svg xmlns="http://www.w3.org/2000/svg" className={`${className}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>);
 const CarIcon = ({className="w-5 h-5"}: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-1h12v1a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>;
 const FlightIcon = ({className="w-5 h-5"}: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>;
-const BedIcon = ({className="w-5 h-5"}: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M19 7h-8v6h8V7zm2-2H5c-1.1 0-2 .9-2 2v12h2V11h14v6h2V7c0-1.1-.9-2-2-2zm-4 8H9c-.55 0-1-.45-1-1s.45-1 1-1h6c.55 0 1 .45 1 1s-.45 1-1 1z"/></svg>;
 const WalkIcon = ({className="w-5 h-5"}: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 14.7V22h2v-6h1v4h2v-6h1v6h2v-7.3l-2.5-5.4-1.7 1z"/></svg>;
-const BoatIcon = ({className="w-5 h-5"}: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M20 13c2 0 4-2 4-4V7h-2v2h-2m0-9H4a2 2 0 0 0-2 2v11.5A3.5 3.5 0 0 0 5.5 19h13A3.5 3.5 0 0 0 22 15.5V11h-2v2H4V4h16V2M6 6v3h2V6H6m4 0v3h2V6h-2m4 0v3h2V6h-2z"/></svg>;
+const BoatIcon = ({className="w-5 h-5"}: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M20 21c-1.1 0-2-.9-2-2V7h2v12c0 1.1-.9 2-2 2zM4 21c-1.1 0-2-.9-2-2V7h2v12c0 1.1-.9 2-2 2zm16-8-8-5.5-8 5.5V3h16v10zm-3-5.5H7V5h10v2.5z"/></svg>;
 const FoodIcon = ({className="w-5 h-5"}: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>;
 const LandmarkIcon = ({className="w-5 h-5"}: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>;
 const ShoppingIcon = ({className="w-5 h-5"}: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M18 6h-2c0-2.21-1.79-4-4-4S8 3.79 8 6H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2c1.1 0 2 .9 2 2h-4c0-1.1.9-2 2-2zm6 16H6V8h12v12z"/></svg>;
@@ -172,7 +172,7 @@ const getActivityVisuals = (activity: string) => {
     if (lower.includes('fansipan peak')) return { type: 'HIGHLIGHT', icon: <MountainIcon/>, title: 'Fansipan Peak via Cable Car' };
     if (lower.includes('halong bay luxury day cruise')) return { type: 'HIGHLIGHT', icon: <BoatIcon/>, title: 'Halong Bay Luxury Day Cruise' };
 
-    if (lower.includes('hotel') || lower.includes('check-in') || lower.includes('overnight')) return { type: 'TRANSITION', icon: <BedIcon /> };
+    if (lower.includes('hotel') || lower.includes('check-in') || lower.includes('overnight')) return { type: 'TRANSITION', icon: <BuildingOfficeIcon /> };
     
     if (lower.includes('airport') || lower.includes('private transfer')) return { type: 'TRANSITION', icon: <FlightIcon /> };
     if (lower.includes('car') || lower.includes('bus') || lower.includes('pickup') || lower.includes('transfer to')) return { type: 'TRANSITION', icon: <CarIcon/> };
@@ -539,7 +539,7 @@ const DayUseHotelInfo: React.FC<{ hotel: HotelStay }> = ({ hotel }) => {
 const HotelTimelineInfo: React.FC<{ hotel: HotelStay }> = ({ hotel }) => {
     return (
         <div className="p-4 mb-6 rounded-lg bg-brand-sand/70 border border-brand-jungle/20 flex items-start">
-            <BedIcon className="w-8 h-8 text-brand-jungle mr-4 flex-shrink-0 mt-1" />
+            <BuildingOfficeIcon className="w-8 h-8 text-brand-jungle mr-4 flex-shrink-0 mt-1" />
             <div>
                 <p className="font-bold text-brand-jungle text-xs">Tonight's Accommodation</p>
                 <a href={hotel.bookingUrl} target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-2">
@@ -925,7 +925,7 @@ const AccommodationDetails: React.FC<{ accommodation: Accommodation }> = ({ acco
                    
                     <div className="mt-4 border-t border-brand-jungle/10 pt-4 space-y-3">
                         <div className="flex items-start">
-                            <BedIcon className="w-5 h-5 text-brand-charcoal/70 mr-3 mt-0.5 flex-shrink-0" />
+                            <BuildingOfficeIcon className="w-5 h-5 text-brand-charcoal/70 mr-3 mt-0.5 flex-shrink-0" />
                             <div>
                                 <p className="font-semibold text-brand-charcoal/90 text-sm">Room Details</p>
                                 <p className="text-sm text-gray-600">{hotel.rooms}</p>
