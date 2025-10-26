@@ -116,7 +116,7 @@ const CarIcon = ({className="w-5 h-5"}: { className?: string }) => <svg xmlns="h
 const FlightIcon = ({className="w-5 h-5"}: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>;
 const BedIcon = ({className="w-5 h-5"}: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M19 7h-8v6h8V7zm2-2H5c-1.1 0-2 .9-2 2v12h2V11h14v6h2V7c0-1.1-.9-2-2-2zm-4 8H9c-.55 0-1-.45-1-1s.45-1 1-1h6c.55 0 1 .45 1 1s-.45 1-1 1z"/></svg>;
 const WalkIcon = ({className="w-5 h-5"}: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 14.7V22h2v-6h1v4h2v-6h1v6h2v-7.3l-2.5-5.4-1.7 1z"/></svg>;
-const BoatIcon = ({className="w-5 h-5"}: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M3.95 10.28C3.77 10.11 3.77 9.8 3.95 9.62l2.63-2.63c.18-.18.49-.18.67 0l2.63 2.63c.18.18.18.49 0 .67L7.25 12.9c-.18.18-.49.18-.67 0L3.95 10.28zm13.46.01c-.18-.18-.18-.49 0-.67l2.63-2.63c.18-.18.49-.18.67 0l2.63 2.63c.18.18.18.49 0 .67l-2.63 2.63c-.18.18-.49.18-.67 0l-2.63-2.63zM20 21c-1.39 0-2.78-.47-4-1.32-2.44 1.71-5.56 1.71-8 0C6.78 20.53 5.39 21 4 21H2v-2h2c.74 0 1.45-.17 2.09-.46-1.5-1.25-2.48-2.87-2.83-4.64-.18-.93.36-1.9 1.25-2.25.88-.35 1.83.19 2.18 1.08.35.89.03 1.9-1.25 2.25C8.84 15.68 10.42 16 12 16s3.16-.32 4.56-1.02c-1.28-.35-1.6-1.36-1.25-2.25.35-.88 1.3-1.43 2.18-1.08.9.36 1.43 1.32 1.25 2.25-.35 1.77-1.33 3.39-2.83 4.64C18.55 18.83 19.26 19 20 19h2v2h-2z"/></svg>;
+const BoatIcon = ({className="w-5 h-5"}: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M20 13c2 0 4-2 4-4V7h-2v2h-2m0-9H4a2 2 0 0 0-2 2v11.5A3.5 3.5 0 0 0 5.5 19h13A3.5 3.5 0 0 0 22 15.5V11h-2v2H4V4h16V2M6 6v3h2V6H6m4 0v3h2V6h-2m4 0v3h2V6h-2z"/></svg>;
 const FoodIcon = ({className="w-5 h-5"}: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>;
 const LandmarkIcon = ({className="w-5 h-5"}: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>;
 const ShoppingIcon = ({className="w-5 h-5"}: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M18 6h-2c0-2.21-1.79-4-4-4S8 3.79 8 6H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2c1.1 0 2 .9 2 2h-4c0-1.1.9-2 2-2zm6 16H6V8h12v12z"/></svg>;
@@ -134,7 +134,7 @@ const XMarkIcon = ({ className = "w-6 h-6" }: { className?: string }) => <svg xm
 const InformationCircleIcon = ({ className = "w-6 h-6" }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}><path fillRule="evenodd" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 7h2v2h-2zm0 4h2v6h-2z" clipRule="evenodd" /></svg>;
 const TicketIcon = ({ className = "w-5 h-5" }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5 4a3 3 0 00-3 3v6a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H5zm-1 9v-1h5v2H5a1 1 0 01-1-1zm7 1h4a1 1 0 001-1v-1h-5v2zm0-4h5V8h-5v2zM4 9h5V7H4v2z" clipRule="evenodd" /></svg>;
 const PassportIcon = ({ className = "w-5 h-5" }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M20 5H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zM4 17V7h16v10H4zm6-7H8v4h2v-4zm4 0h-2v4h2v-4zm4 0h-2v4h2v-4z"/><circle cx="12" cy="10.5" r="1.5"/><path d="M12 14c-1.65 0-3 1.35-3 3h6c0-1.65-1.35-3-3-3z"/></svg>;
-const ShirtIcon = ({ className = "w-5 h-5" }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 4.5c-.28 0-.5.22-.5.5v4c0 .28-.22.5-.5.5h-2.5c-.28 0-.5-.22-.5-.5v-4c0-.28-.22-.5-.5-.5S15.5 4.72 15.5 5v3.5c0 .83.67 1.5 1.5 1.5h1v.5c0 2.76-2.24 5-5 5s-5-2.24-5-5v-.5h1c.83 0 1.5-.67 1.5-1.5V5c0-.28-.22-.5-.5-.5s-.5.22-.5.5v4c0 .28-.22.5-.5.5H3.5c-.28 0-.5-.22-.5-.5v-4c0-.28-.22-.5-.5-.5s-.5.22-.5.5v4c0 1.38 1.12 2.5 2.5 2.5h2.5c.28 0 .5.22.5.5v.5c0 3.86 3.14 7 7 7s7-3.14 7-7v-.5c0-.28.22-.5.5-.5h2.5c1.38 0 2.5-1.12 2.5-2.5v-4c0-.28-.22-.5-.5-.5z"/></svg>;
+const ShirtIcon = ({ className = "w-5 h-5" }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c-2.4 0-4.47 1.63-4.92 3.82L6.15 9.5c-.22.61.02 1.29.57 1.72l4.13 3.27c.45.36 1.09.36 1.54 0l4.13-3.27c.55-.43.79-1.11.57-1.72l-.93-3.68C16.47 3.63 14.4 2 12 2zm-1.94 13.91L5 19v2h14v-2l-5.06-3.09c-.58.37-1.25.59-1.94.59s-1.36-.22-1.94-.59z"/></svg>;
 const PassportStampIcon = ({ className = "w-16 h-16" }: { className?: string }) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className={className}>
         <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" strokeWidth="4" strokeDasharray="10 5" />
@@ -150,6 +150,7 @@ const LinkIcon = ({ className = "w-4 h-4" }: { className?: string }) => <svg xml
 const ClipboardListIcon = ({ className = "w-5 h-5" }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={className}><path fillRule="evenodd" d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2H4zm3 2h6v2H7V4zm0 4h6v2H7V8zm0 4h6v2H7v-2z" clipRule="evenodd" /></svg>;
 const ClockIcon = ({ className = "w-6 h-6" }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
 const ChevronDownIcon = ({ className = "w-5 h-5" }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>;
+const DocumentTextIcon = ({ className = "w-5 h-5" }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V8.342a2 2 0 00-.586-1.414l-4.342-4.342A2 2 0 0011.658 2H4zm4 8a1 1 0 10-2 0v2a1 1 0 102 0v-2zm2-2a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" clipRule="evenodd" /></svg>;
 
 
 // --- Currency Flags ---
@@ -164,7 +165,7 @@ const getActivityVisuals = (activity: string) => {
     if (lower.includes('flight to da nang')) return { type: 'MAJOR_TRAVEL', icon: <FlightIcon/>, details: 'Flight to Danang'};
     if (lower.includes('sapa night bus')) return { type: 'MAJOR_TRAVEL', icon: <CarIcon/>, details: 'VIP Cabin Bus to Sapa'};
     
-    if (lower.includes('dinner cruise')) return { type: 'HIGHLIGHT', icon: <BoatIcon/>, title: 'Dinner Cruise on the Saigon River' };
+    if (lower.includes('dinner cruise')) return { type: 'HIGHLIGHT', icon: <BoatIcon/>, title: 'Dinner Cruise on Saigon River' };
     if (lower.includes('my son sanctuary')) return { type: 'HIGHLIGHT', icon: <PagodaIcon/>, title: 'My Son Sanctuary (World Heritage)' };
     if (lower.includes('golden bridge')) return { type: 'HIGHLIGHT', icon: <LandmarkIcon/>, title: 'Iconic: Golden Bridge Walk' };
     if (lower.includes('coconut forest')) return { type: 'HIGHLIGHT', icon: <BoatIcon/>, title: 'Basket Boat Trip in Coconut Forest' };
@@ -216,7 +217,9 @@ const InteractiveMap: React.FC<{
             const polylineCoords: L.LatLng[] = [];
 
             markersRef.current = dayPlans.map(plan => {
-                if (!plan.coords || isNaN(plan.coords[0]) || isNaN(plan.coords[1])) return null;
+                if (!Array.isArray(plan.coords) || plan.coords.length !== 2 || typeof plan.coords[0] !== 'number' || typeof plan.coords[1] !== 'number') {
+                    return null;
+                }
 
                 const latLng = L.latLng(plan.coords[0], plan.coords[1]);
                 
@@ -276,7 +279,7 @@ const InteractiveMap: React.FC<{
         
         if (openDay) {
             const plan = dayPlans.find(p => p.day === openDay);
-            if (plan && plan.coords && !isNaN(plan.coords[0]) && !isNaN(plan.coords[1])) {
+            if (plan && Array.isArray(plan.coords) && plan.coords.length === 2 && typeof plan.coords[0] === 'number' && typeof plan.coords[1] === 'number') {
                 const latLng = L.latLng(plan.coords[0], plan.coords[1]);
                 mapRef.current.flyTo(latLng, 11, {
                     animate: true,
@@ -381,8 +384,8 @@ const TimelineItem: React.FC<{ activity: string; index: number; isOpen: boolean,
             );
             content = (
                 <div className="rounded-xl p-4 bg-brand-sky/10 border-2 border-dashed border-brand-sky/30">
-                    <p className="font-bold text-brand-sky">{visualInfo.details}</p>
-                    <p className="text-gray-600 text-sm mt-1">{description}</p>
+                    <p className="font-bold text-brand-sky text-sm">{visualInfo.details}</p>
+                    <p className="text-gray-600 text-xs mt-1">{description}</p>
                 </div>
             );
             break;
@@ -401,8 +404,8 @@ const TimelineItem: React.FC<{ activity: string; index: number; isOpen: boolean,
                  <div className="relative rounded-xl p-4 bg-gradient-to-br from-amber-50 to-orange-100 border border-amber-200 shadow-lg transform hover:scale-[1.03] hover:shadow-xl transition-all duration-300 overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent animate-shimmer bg-[length:200%_100%]"></div>
                     <SparklesIcon className="absolute top-3 right-3 w-5 h-5 text-amber-500 opacity-80" />
-                    <h5 className="font-bold text-amber-900 text-lg">{visualInfo.title}</h5>
-                    <p className="text-gray-700 mt-1">{description}</p>
+                    <h5 className="font-bold text-amber-900 text-base">{visualInfo.title}</h5>
+                    <p className="text-gray-700 mt-1 text-sm">{description}</p>
                 </div>
             );
             break;
@@ -416,9 +419,9 @@ const TimelineItem: React.FC<{ activity: string; index: number; isOpen: boolean,
             );
             content = (
                 <>
-                    {time && <p className="text-xl font-bold text-brand-charcoal -mt-1 mb-1">{time.split('-')[0]}</p>}
+                    {time && <p className="text-xs font-bold text-brand-charcoal -mt-1 mb-1">{time.split('-')[0]}</p>}
                     <div className={`rounded-xl p-4 transition-shadow duration-300 hover:shadow-lg ${isTransition ? 'bg-indigo-50/70 border border-indigo-100' : 'bg-white border'}`}>
-                        <p className={`text-gray-700 ${isTransition ? 'font-semibold' : ''}`}>{description}</p>
+                        <p className={`text-gray-700 text-sm ${isTransition ? 'font-semibold' : ''}`}>{description}</p>
                     </div>
                 </>
             );
@@ -521,9 +524,9 @@ const DayUseHotelInfo: React.FC<{ hotel: HotelStay }> = ({ hotel }) => {
         <div className="p-4 mb-6 rounded-lg bg-blue-50 border border-blue-200 flex items-start">
             <ClockIcon className="w-8 h-8 text-blue-600 mr-4 flex-shrink-0 mt-1" />
             <div>
-                <p className="font-bold text-blue-700 text-sm">Day Use Hotel</p>
+                <p className="font-bold text-blue-700 text-xs">Day Use Hotel</p>
                 <a href={hotel.bookingUrl} target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-2">
-                    <h4 className="font-sans font-bold text-xl text-brand-accent group-hover:text-brand-accent/80 transition-colors">{hotel.name}</h4>
+                    <h4 className="font-sans font-bold text-lg text-brand-accent group-hover:text-brand-accent/80 transition-colors">{hotel.name}</h4>
                     <LinkIcon className="w-4 h-4 text-brand-accent/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </a>
                 <p className="text-sm text-gray-600">in {hotel.city}</p>
@@ -538,9 +541,9 @@ const HotelTimelineInfo: React.FC<{ hotel: HotelStay }> = ({ hotel }) => {
         <div className="p-4 mb-6 rounded-lg bg-brand-sand/70 border border-brand-jungle/20 flex items-start">
             <BedIcon className="w-8 h-8 text-brand-jungle mr-4 flex-shrink-0 mt-1" />
             <div>
-                <p className="font-bold text-brand-jungle text-sm">Tonight's Accommodation</p>
+                <p className="font-bold text-brand-jungle text-xs">Tonight's Accommodation</p>
                 <a href={hotel.bookingUrl} target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-2">
-                    <h4 className="font-sans font-bold text-xl text-brand-accent group-hover:text-brand-accent/80 transition-colors">{hotel.name}</h4>
+                    <h4 className="font-sans font-bold text-lg text-brand-accent group-hover:text-brand-accent/80 transition-colors">{hotel.name}</h4>
                     <LinkIcon className="w-4 h-4 text-brand-accent/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </a>
                 <p className="text-sm text-gray-600">in {hotel.city}</p>
@@ -620,7 +623,7 @@ const DayAccordion: React.FC<{ dayPlan: DayPlan; isOpen: boolean; onClick: () =>
                                         <StarIcon className="w-6 h-6" />
                                     </div>
                                 )}
-                                <h3 className="text-base font-bold font-sans text-brand-charcoal/90">{dayPlan.title}</h3>
+                                <h3 className="text-xs font-bold font-sans text-brand-charcoal/90">{dayPlan.title}</h3>
                             </div>
                         </div>
                         <TravelStatusHeader currentDestination={dayPlan.destination} prevDestination={prevDestination} />
@@ -645,7 +648,7 @@ const DayAccordion: React.FC<{ dayPlan: DayPlan; isOpen: boolean; onClick: () =>
 
                         <div className="grid md:grid-cols-3 gap-6">
                             <div className="md:col-span-2">
-                                <h4 className="text-xl font-bold mb-4 text-brand-charcoal">Daily Activities</h4>
+                                <h4 className="text-lg font-bold mb-4 text-brand-charcoal">Daily Activities</h4>
                                 <ActivityTimeline activities={dayPlan.activities} isOpen={isOpen} />
                             </div>
                             <div className="space-y-6">
@@ -1181,15 +1184,24 @@ const App: React.FC = () => {
                                 className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-semibold rounded-full shadow-lg text-brand-jungle bg-brand-sun hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-brand-sun transition-all duration-300 transform hover:scale-105 active:scale-100"
                             >
                                 <TicketIcon className="w-5 h-5 mr-2 -ml-1" />
-                                View Flight E-Tickets
+                                Flight E-Tickets
                             </button>
                              <button 
                                 onClick={() => { setIsVisaSectionOpen(!isVisaSectionOpen); setIsFlightSectionOpen(false); }}
                                 className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-semibold rounded-full shadow-lg text-brand-jungle bg-brand-sun hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-brand-sun transition-all duration-300 transform hover:scale-105 active:scale-100"
                             >
                                 <PassportIcon className="w-5 h-5 mr-2 -ml-1" />
-                                View Visa
+                                Visa
                             </button>
+                             <a
+                                href="https://drive.google.com/drive/u/3/folders/1xs1eDOhKS9Z7GKdvtEJTkXnEEZgkNA9E"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-semibold rounded-full shadow-lg text-brand-jungle bg-brand-sun hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-brand-sun transition-all duration-300 transform hover:scale-105 active:scale-100"
+                            >
+                                <DocumentTextIcon className="w-5 h-5 mr-2 -ml-1" />
+                                All Docs
+                            </a>
                         </div>
                     </AnimatedSection>
                 </div>
