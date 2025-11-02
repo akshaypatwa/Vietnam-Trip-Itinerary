@@ -30,10 +30,12 @@
             animation: {
               'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
               'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-              'shimmer': 'shimmer 2s linear infinite',
+              'shimmer': 'shimmer 3s linear infinite',
               'flip-in': 'flipIn 0.8s ease-out forwards',
               'stamp-in': 'stampIn 0.5s ease-out forwards',
               'point-and-shake': 'pointAndShake 2.5s ease-in-out infinite',
+              'pop-in': 'popIn 0.6s ease-out forwards',
+              'place-in': 'placeIn 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
             },
             keyframes: {
               fadeInUp: {
@@ -41,8 +43,8 @@
                 '100%': { opacity: '1', transform: 'translateY(0)' },
               },
               shimmer: {
-                '0%': { backgroundPosition: '200% 0' },
-                '100%': { backgroundPosition: '-200% 0' },
+                '0%': { backgroundPosition: '-200% 0' },
+                '100%': { backgroundPosition: '200% 0' },
               },
               flipIn: {
                 '0%': { transform: 'perspective(1000px) rotateX(-90deg)', opacity: '0' },
@@ -58,7 +60,19 @@
                 '20%, 60%': { transform: 'translateX(-5px) rotate(-3deg)' },
                 '40%, 80%': { transform: 'translateX(5px) rotate(3deg)' },
               },
-            }
+              popIn: {
+                '0%': { opacity: '0', transform: 'scale(0.85) translateY(20px)' },
+                '100%': { opacity: '1', transform: 'scale(1) translateY(0)' },
+              },
+              placeIn: {
+                '0%': { transform: 'translateY(20px) rotate(-10deg) scale(0.9)', opacity: '0' },
+                '70%': { transform: 'translateY(0) rotate(5deg) scale(1.05)', opacity: '1' },
+                '100%': { transform: 'translateY(0) rotate(0deg) scale(1)', opacity: '1' },
+              }
+            },
+            backgroundImage: {
+              'parchment': `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill='%231E5950' fill-opacity='0.02'%3E%3Crect x='0' y='0' width='100' height='100'/%3E%3C/g%3E%3C/svg%3E")`,
+            },
           }
         }
       }
@@ -74,7 +88,8 @@
 }
 </script>
 </head>
-  <body class="bg-brand-sand">
+  <body class="bg-brand-sand bg-parchment">
+    <div id="scroll-progress-bar" class="fixed top-0 left-0 z-50 h-1.5 bg-gradient-to-r from-brand-sun via-brand-accent to-brand-sky" style="width: 0%;"></div>
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>

@@ -1,6 +1,3 @@
-
-
-
 import React, { useState, useEffect, useRef } from 'react';
 import L from 'leaflet';
 import { TRIP_DATA, CURRENCY_RATES } from './constants';
@@ -119,7 +116,7 @@ const WalkIcon = ({className="w-5 h-5"}: { className?: string }) => <svg xmlns="
 const BoatIcon = ({className="w-5 h-5"}: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M20 21c-1.1 0-2-.9-2-2V7h2v12c0 1.1-.9 2-2 2zM4 21c-1.1 0-2-.9-2-2V7h2v12c0 1.1-.9 2-2 2zm16-8-8-5.5-8 5.5V3h16v10zm-3-5.5H7V5h10v2.5z"/></svg>;
 const FoodIcon = ({className="w-5 h-5"}: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>;
 const LandmarkIcon = ({className="w-5 h-5"}: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>;
-const ShoppingIcon = ({className="w-5 h-5"}: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M18 6h-2c0-2.21-1.79-4-4-4S8 3.79 8 6H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2c1.1 0 2 .9 2 2h-4c0-1.1.9-2 2-2zm6 16H6V8h12v12z"/></svg>;
+const ShoppingIcon = ({className="w-5 h-5"}: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M18 6h-2c0-2.21-1.79-4-4-4S8 3.79 8 6H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2zm-6-2c1.1 0 2 .9 2 2h-4c0-1.1.9-2 2-2zm6 16H6V8h12v12z"/></svg>;
 const MountainIcon = ({className="w-5 h-5"}: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M15 6l-2.5 4L10 4l-5 12h16z"/></svg>;
 const CableCarIcon = ({className="w-5 h-5"}: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M6 16.71V9c0-1.1.9-2 2-2h8c1.1 0 2 .9 2 2v7.71a3.5 3.5 0 0 1-2.5 3.41V22h-1v-2h-5v2H9v-1.88a3.5 3.5 0 0 1-2.5-3.41zM16 11H8v5h8v-5zm-2.5 8.5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5zm-3 0c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5z"/><path d="M3 4h18v3H3z"/></svg>;
 const PagodaIcon = ({className="w-5 h-5"}: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L1 9l4 1v9H3v2h18v-2h-2v-9l4-1L12 2zm0 4.69L15.31 9H8.69L12 6.69zM7 11h10v7H7v-7zm2 2v3h6v-3H9z"/></svg>;
@@ -209,6 +206,10 @@ const InteractiveMap: React.FC<{
             });
             mapRef.current = map;
 
+            if (L.Browser.touch) {
+                map.dragging.disable();
+            }
+
             L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
             }).addTo(map);
@@ -217,7 +218,7 @@ const InteractiveMap: React.FC<{
             const polylineCoords: L.LatLng[] = [];
 
             markersRef.current = dayPlans.map(plan => {
-                if (!Array.isArray(plan.coords) || plan.coords.length !== 2 || typeof plan.coords[0] !== 'number' || typeof plan.coords[1] !== 'number') {
+                if (!Array.isArray(plan.coords) || plan.coords.length !== 2 || typeof plan.coords[0] !== 'number' || typeof plan.coords[1] !== 'number' || !Number.isFinite(plan.coords[0]) || !Number.isFinite(plan.coords[1])) {
                     return null;
                 }
 
@@ -264,6 +265,14 @@ const InteractiveMap: React.FC<{
     useEffect(() => {
         if (!mapRef.current) return;
 
+        if (L.Browser.touch) {
+            if (openDay) {
+                mapRef.current.dragging.enable();
+            } else {
+                mapRef.current.dragging.disable();
+            }
+        }
+
         markersRef.current.forEach((marker, index) => {
             if (!marker) return;
             const day = index + 1;
@@ -279,7 +288,7 @@ const InteractiveMap: React.FC<{
         
         if (openDay) {
             const plan = dayPlans.find(p => p.day === openDay);
-            if (plan && Array.isArray(plan.coords) && plan.coords.length === 2 && typeof plan.coords[0] === 'number' && typeof plan.coords[1] === 'number') {
+             if (plan && Array.isArray(plan.coords) && plan.coords.length === 2 && Number.isFinite(plan.coords[0]) && Number.isFinite(plan.coords[1])) {
                 const latLng = L.latLng(plan.coords[0], plan.coords[1]);
                 mapRef.current.flyTo(latLng, 11, {
                     animate: true,
@@ -331,7 +340,7 @@ const CreativeHeader: React.FC<{ main: string; script: string; icon: React.React
                     {main}
                 </span>
                 <span
-                    className="text-5xl font-script font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-sun to-yellow-400 transform -rotate-6 -mt-6"
+                    className="text-5xl font-script font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-sun to-yellow-400 animate-shimmer bg-[length:200%_auto] transform -rotate-6 -mt-6"
                     style={{ textShadow: '2px 2px 8px rgba(0,0,0,0.3)' }}
                 >
                     {script}
@@ -342,16 +351,19 @@ const CreativeHeader: React.FC<{ main: string; script: string; icon: React.React
 };
 
 const StandaloneCreativeHeader: React.FC<{ main: string; script: string }> = ({ main, script }) => (
-    <div className="relative text-center h-20 flex flex-col items-center justify-center my-6">
-        <span className="text-4xl font-bold font-sans text-brand-charcoal/80 drop-shadow-sm tracking-wider uppercase z-10">
-            {main}
-        </span>
-        <span
-            className="text-6xl font-script font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-jungle to-brand-accent transform -rotate-6 -mt-6"
-            style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.1)' }}
-        >
-            {script}
-        </span>
+    <div className="relative text-center flex flex-col items-center justify-center my-6">
+        <div className="relative z-10">
+            <span className="text-4xl font-bold font-sans text-brand-charcoal/80 drop-shadow-sm tracking-wider uppercase">
+                {main}
+            </span>
+            <span
+                className="text-6xl font-script font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-jungle to-brand-accent transform -rotate-6 -mt-6 block"
+                style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.1)' }}
+            >
+                {script}
+            </span>
+        </div>
+        <div className="h-1.5 w-32 bg-gradient-to-r from-brand-sun to-brand-accent rounded-full -mt-4 transform -rotate-1"></div>
     </div>
 );
 
@@ -359,7 +371,7 @@ const Section: React.FC<{ mainTitle: string; scriptTitle: string; icon: React.Re
     <div className="p-1 bg-gradient-to-br from-brand-sky via-brand-sun to-brand-accent rounded-2xl shadow-lg">
         <div className="relative rounded-xl overflow-hidden bg-white">
             <CreativeHeader main={mainTitle} script={scriptTitle} icon={icon} />
-            <div className="p-6 bg-white" style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%231E5950\' fill-opacity=\'0.03\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")'}}>
+            <div className="p-6 bg-brand-sand/50">
                 {children}
             </div>
         </div>
@@ -372,73 +384,118 @@ const TimelineItem: React.FC<{ activity: string; index: number; isOpen: boolean,
     const description = time ? activity.replace(timeMatch[0], '').trim() : activity;
     const visualInfo = getActivityVisuals(activity);
 
-    let iconContainer: React.ReactNode;
-    let content: React.ReactNode;
+    let timelineElement: React.ReactNode;
+    let contentContainer: React.ReactNode;
+    const isTransition = visualInfo.type === 'TRANSITION';
+
+    const baseCardClass = "w-full transition-all duration-500 transform relative";
+    const baseIconHolderClass = "z-10 w-12 h-12 rounded-full flex items-center justify-center bg-brand-sand/80 backdrop-blur-sm shadow-md border-2 border-white";
 
     switch (visualInfo.type) {
         case 'MAJOR_TRAVEL':
-            iconContainer = (
-                <div className="z-10 w-12 h-12 rounded-full flex items-center justify-center border-4 border-brand-sky/50 bg-brand-sky/20 text-brand-sky">
-                    {React.cloneElement(visualInfo.icon, { className: "w-6 h-6" })}
+            timelineElement = (
+                 <div className={`${baseIconHolderClass}`}>
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center bg-brand-sky text-white shadow-inner">
+                        {React.cloneElement(visualInfo.icon, { className: "w-5 h-5" })}
+                    </div>
                 </div>
             );
-            content = (
-                <div className="rounded-xl p-4 bg-brand-sky/10 border-2 border-dashed border-brand-sky/30">
-                    <p className="font-bold text-brand-sky text-sm">{visualInfo.details}</p>
-                    <p className="text-gray-600 text-xs mt-1">{description}</p>
+            contentContainer = (
+                 <div className={`${baseCardClass} bg-sky-100 p-4 rounded-lg shadow-lg hover:shadow-xl hover:-translate-y-1 transform -rotate-1 hover:rotate-0 border-l-8 border-sky-300`}>
+                    <div className="flex items-start">
+                        <div className="w-8 h-8 rounded-full border-2 border-dashed border-sky-400 flex items-center justify-center mr-3 flex-shrink-0">
+                            {React.cloneElement(visualInfo.icon, { className: "w-5 h-5 text-sky-600" })}
+                        </div>
+                        <div>
+                            <h5 className="font-bold font-sans text-sky-700 uppercase text-xs tracking-wider">{visualInfo.details}</h5>
+                            <p className="text-gray-700 text-sm mt-1">{description}</p>
+                        </div>
+                    </div>
                 </div>
             );
             break;
 
         case 'HIGHLIGHT':
-            iconContainer = (
-                 <div className="z-10 w-12 h-12 rounded-full flex items-center justify-center border-4 border-amber-300 bg-amber-100 text-amber-600 relative">
-                    {React.cloneElement(visualInfo.icon, { className: "w-6 h-6" })}
-                    <span className="absolute flex h-3 w-3 top-0 right-0 -mt-1 -mr-1">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+            timelineElement = (
+                <div className={`${baseIconHolderClass} border-brand-sun`}>
+                    <span className="absolute flex h-full w-full">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-sun opacity-75"></span>
                     </span>
+                    <div className="relative w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-brand-sun to-yellow-400 text-brand-jungle shadow-lg">
+                        {React.cloneElement(visualInfo.icon, { className: "w-6 h-6" })}
+                    </div>
                 </div>
             );
-            content = (
-                 <div className="relative rounded-xl p-4 bg-gradient-to-br from-amber-50 to-orange-100 border border-amber-200 shadow-lg transform hover:scale-[1.03] hover:shadow-xl transition-all duration-300 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent animate-shimmer bg-[length:200%_100%]"></div>
-                    <SparklesIcon className="absolute top-3 right-3 w-5 h-5 text-amber-500 opacity-80" />
-                    <h5 className="font-bold text-amber-900 text-base">{visualInfo.title}</h5>
-                    <p className="text-gray-700 mt-1 text-sm">{description}</p>
+            contentContainer = (
+                <div className={`${baseCardClass} bg-white p-3 pb-8 rounded-md shadow-xl hover:shadow-2xl hover:-translate-y-1 transform rotate-2 hover:rotate-1`}>
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-6 bg-yellow-200/50 backdrop-blur-sm border border-yellow-300/50 rounded-sm opacity-70 transform -rotate-3 z-20"></div>
+                    <div className="relative">
+                        <h5 className="font-bold font-sans text-brand-jungle uppercase text-xs tracking-wider">Highlight</h5>
+                        <p className="font-handwriting text-brand-charcoal text-2xl mt-1">{visualInfo.title}</p>
+                        <p className="text-gray-600 mt-2 text-xs">{description}</p>
+                    </div>
                 </div>
             );
             break;
-        
-        default: 
-            const isTransition = visualInfo.type === 'TRANSITION';
-            iconContainer = (
-                <div className={`z-10 w-12 h-12 rounded-full flex items-center justify-center border-4 ${isTransition ? 'bg-indigo-100 border-indigo-200 text-indigo-600' : 'bg-green-100 border-green-200 text-green-600'}`}>
-                    {React.cloneElement(visualInfo.icon, { className: "w-6 h-6" })}
+
+        case 'TRANSITION':
+            timelineElement = (
+                <div className="z-10 w-12 h-12 rounded-full flex items-center justify-center">
+                    <div className="w-2.5 h-2.5 bg-gray-300 rounded-full border-2 border-white shadow-sm"></div>
                 </div>
             );
-            content = (
-                <>
-                    {time && <p className="text-xs font-bold text-brand-charcoal -mt-1 mb-1">{time.split('-')[0]}</p>}
-                    <div className={`rounded-xl p-4 transition-shadow duration-300 hover:shadow-lg ${isTransition ? 'bg-indigo-50/70 border border-indigo-100' : 'bg-white border'}`}>
-                        <p className={`text-gray-700 text-sm ${isTransition ? 'font-semibold' : ''}`}>{description}</p>
+            contentContainer = (
+                <div className="flex items-center h-12 -mt-1 pl-2">
+                    {time && <p className="text-xs font-semibold text-gray-500 mr-4 bg-gray-100 px-2 py-0.5 rounded-full">{time.split('-')[0]}</p>}
+                    <p className="text-gray-500 text-sm italic tracking-wide">{description}</p>
+                </div>
+            );
+            break;
+
+        default: // ACTIVITY
+             const colors = [
+                { border: 'border-brand-accent', bg: 'bg-red-50', text: 'text-brand-accent' },
+                { border: 'border-brand-sky', bg: 'bg-blue-50', text: 'text-brand-sky' },
+                { border: 'border-brand-jungle', bg: 'bg-emerald-50', text: 'text-brand-jungle' },
+            ];
+            const color = colors[index % colors.length];
+            const rotation = ['rotate-1', '-rotate-1', 'rotate-2'][index % 3];
+
+            timelineElement = (
+                 <div className={`${baseIconHolderClass}`}>
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center bg-white ${color.text} shadow-inner`}>
+                        {React.cloneElement(visualInfo.icon, { className: "w-5 h-5" })}
                     </div>
-                </>
+                </div>
+            );
+            contentContainer = (
+                 <div className={`${baseCardClass} ${color.bg} p-4 rounded-lg shadow-lg hover:shadow-xl hover:-translate-y-1 transform ${rotation} hover:rotate-0 border-l-4 ${color.border}`}>
+                     <div className="flex items-center">
+                        <div>
+                            {time && <p className={`text-xs font-bold ${color.text} mb-1`}>{time.split('-')[0]}</p>}
+                            <p className="text-gray-700 text-sm">{description}</p>
+                        </div>
+                     </div>
+                </div>
             );
             break;
     }
 
     return (
-        <div className="flex">
-            <div className="flex flex-col items-center mr-6">
-                {iconContainer}
-                {!isLast && <div className="w-0.5 flex-grow bg-gray-200" />}
+        <div className="flex min-h-[6rem]">
+            <div className="flex flex-col items-center mr-4">
+                {timelineElement}
+                {!isLast && (
+                    <div className={`w-0.5 flex-grow bg-gradient-to-b from-brand-sky via-brand-jungle to-brand-accent transition-transform duration-700 ease-out origin-top ${isOpen ? 'scale-y-100' : 'scale-y-0'}`} 
+                         style={{ transitionDelay: `${isOpen ? index * 50 : 0}ms` }}
+                    />
+                )}
             </div>
-            <div 
-                className={`flex-grow pb-10 transition-all duration-500 transform ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-                style={{ transitionDelay: `${isOpen ? index * 80 : 0}ms` }}
+            <div
+                className={`flex-grow ${isTransition ? 'pt-0' : 'pt-2 pb-8'} w-full flex items-center transform ${isOpen ? 'animate-place-in' : 'opacity-0'}`}
+                style={{ animationDelay: `${isOpen ? index * 100 + 100 : 0}ms` }}
             >
-                {content}
+                {contentContainer}
             </div>
         </div>
     );
@@ -459,6 +516,7 @@ const ActivityTimeline: React.FC<{ activities: string[], isOpen: boolean }> = ({
         </div>
     );
 };
+
 
 const TravelStatusHeader: React.FC<{ currentDestination: string; prevDestination: string | null }> = ({ currentDestination, prevDestination }) => {
     if (!prevDestination) {
@@ -499,12 +557,12 @@ const OutfitSuggestion: React.FC<{ suggestion: DayPlan['outfitSuggestion'] }> = 
     if (!suggestion) return null;
 
     return (
-        <div>
+        <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-200/80">
             <h4 className="text-lg font-bold mb-2 text-brand-charcoal flex items-center">
                 <ShirtIcon className="w-5 h-5 mr-2" />
                 What to Wear
             </h4>
-            <div className="p-4 bg-brand-sand rounded-lg border">
+            <div className="p-4 bg-brand-sand/70 rounded-lg border">
                 <h5 className="font-semibold text-brand-jungle">{suggestion.title}</h5>
                 <ul className="mt-2 space-y-1.5 text-sm text-gray-700">
                     {suggestion.points.map((point, index) => (
@@ -575,10 +633,12 @@ const DayAccordion: React.FC<{ dayPlan: DayPlan; isOpen: boolean; onClick: () =>
         return daysCovered ? daysCovered.includes(String(dayPlan.day)) && isDayUse : false;
     });
 
+    const highlightGlowClass = dayPlan.isHighlight ? 'shadow-[0_0_15px_3px_rgba(255,222,107,0.7)] animate-pulse-slow' : '';
+
     return (
         <div className={`transition-all duration-500 ${isOpen ? 'pb-4' : ''}`}>
-            <div className={`bg-white rounded-2xl shadow-lg transition-all duration-500 transform-preserve-3d ${isOpen ? '[transform:rotateX(5deg)]' : 'hover:shadow-xl'}`}>
-                <button onClick={onClick} className="w-full text-left relative block group rounded-2xl overflow-hidden" aria-expanded={isOpen}>
+            <div className={`p-0.5 bg-gradient-to-br from-brand-sun via-brand-accent to-brand-sky rounded-2xl transition-all duration-500 transform-preserve-3d ${isOpen ? '[transform:rotateX(5deg)]' : 'hover:shadow-xl'} ${highlightGlowClass}`}>
+                <button onClick={onClick} className="w-full text-left relative block group rounded-[14px] overflow-hidden" aria-expanded={isOpen}>
                     {/* Background Image & Overlay */}
                     <img
                         src={dayPlan.imageUrl}
@@ -614,9 +674,9 @@ const DayAccordion: React.FC<{ dayPlan: DayPlan; isOpen: boolean; onClick: () =>
 
             <div className={`grid transition-all duration-700 ease-in-out ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
                 <div className="overflow-hidden">
-                    <div className="p-6 bg-white rounded-b-2xl shadow-inner-lg -mt-2 relative">
-                         {isOpen && <div className="absolute top-4 right-4 text-brand-accent/50 opacity-0 animate-stamp-in"><PassportStampIcon/></div>}
-                        <div className="text-center mb-6 border-b pb-4">
+                    <div className="p-4 sm:p-6 bg-gradient-to-b from-brand-sand via-white to-brand-sand/70 rounded-b-2xl shadow-inner-lg -mt-2 relative">
+                        {isOpen && <div className="absolute top-4 right-4 text-brand-accent/50 opacity-0 animate-stamp-in"><PassportStampIcon/></div>}
+                        <div className="text-center mb-6 border-b border-brand-jungle/10 pb-4">
                             <div className="flex items-center justify-center gap-2 mt-2 px-4">
                                 {dayPlan.isHighlight && (
                                     <div className="text-yellow-400 animate-point-and-shake flex-shrink-0" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.5))' }}>
@@ -648,19 +708,22 @@ const DayAccordion: React.FC<{ dayPlan: DayPlan; isOpen: boolean; onClick: () =>
 
                         <div className="grid md:grid-cols-3 gap-6">
                             <div className="md:col-span-2">
-                                <h4 className="text-lg font-bold mb-4 text-brand-charcoal">Daily Activities</h4>
+                                <h4 className="text-lg font-bold mb-4 text-brand-charcoal flex items-center gap-2">
+                                    <ClipboardListIcon className="w-5 h-5 text-brand-jungle"/>
+                                    Your Daily Mission
+                                </h4>
                                 <ActivityTimeline activities={dayPlan.activities} isOpen={isOpen} />
                             </div>
                             <div className="space-y-6">
-                                <div>
+                                <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-200/80">
                                     <h4 className="text-lg font-bold mb-2 text-brand-charcoal">Meals Included</h4>
-                                    <div className="p-3 bg-brand-sand rounded-md border text-sm text-gray-600">
+                                    <div className="p-3 bg-brand-sand/70 rounded-md border text-sm text-gray-600">
                                         {meals.length > 0 && meals[0] !== 'None'
                                             ? meals.map(m => mealMap[m] || m).join(', ')
                                             : 'Meals are not included today. Time for some local food exploration!'}
                                     </div>
                                 </div>
-                                <div>
+                                <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-200/80">
                                     <h4 className="text-lg font-bold mb-2 text-brand-charcoal">What's Covered</h4>
                                     <ul className="space-y-2 text-sm text-gray-700">
                                         {dayPlan.inclusions.map((inclusion, index) => (
@@ -902,7 +965,7 @@ const AccommodationDetails: React.FC<{ accommodation: Accommodation }> = ({ acco
         <p className="mb-8 text-gray-600 text-center">Your home away from home will be in these lovely <strong>{accommodation.category}</strong> hotels.</p>
         <div className="space-y-6">
             {accommodation.hotels.map((hotel, index) => (
-                <div key={index} className="p-4 bg-brand-sand/60 rounded-xl shadow-md border border-brand-jungle/10 transition-shadow hover:shadow-lg">
+                <div key={index} className="p-4 bg-white rounded-xl shadow-md border border-brand-jungle/10 transition-shadow hover:shadow-lg">
                     <div className="sm:flex sm:items-start sm:justify-between">
                         <div>
                             <div className="flex items-center mb-1">
@@ -959,7 +1022,7 @@ const TourCostDetails: React.FC<{ tourCost: TourCost }> = ({ tourCost }) => (
          <p className="mb-4 text-gray-600 text-center">Prices based on a group of <strong>{tourCost.category}</strong></p>
          <div className="space-y-4">
             {tourCost.costs.map((cost, index) => (
-                <div key={index} className="flex flex-col sm:flex-row justify-between sm:items-center gap-2 text-center sm:text-left p-4 bg-brand-sand/70 rounded-lg border border-brand-jungle/10">
+                <div key={index} className="flex flex-col sm:flex-row justify-between sm:items-center gap-2 text-center sm:text-left p-4 bg-white rounded-lg border border-brand-jungle/10">
                     <span className="text-gray-700 font-semibold">{cost.description}</span>
                     <span className="font-bold text-base sm:text-lg text-white bg-brand-accent px-4 py-1.5 rounded-full shadow-sm whitespace-nowrap">{cost.price}</span>
                 </div>
@@ -1029,7 +1092,7 @@ const TravelersGuide: React.FC = () => (
     <Section mainTitle="Traveler's" scriptTitle="Guidebook" icon={<SuitcaseIcon />}>
         <div className="grid md:grid-cols-2 gap-8">
             {/* What to Carry */}
-            <div className="p-4 bg-brand-sand/60 rounded-xl border border-brand-jungle/10">
+            <div className="p-4 bg-white rounded-xl border border-brand-jungle/10">
                 <h3 className="text-lg font-bold mb-3 text-brand-jungle flex items-center">
                     <CheckCircleIcon className="w-6 h-6 mr-2 text-emerald-500" />
                     What to Pack: The Essentials
@@ -1101,18 +1164,18 @@ const FunSection: React.FC = () => {
             <div className="relative">
                  <div className="absolute top-0 left-0 -translate-x-1/3 -translate-y-1/3 opacity-10 text-brand-sun" style={{fontSize: '200px'}}>🇻🇳</div>
                 <div className="p-6 grid md:grid-cols-3 gap-6 text-center">
-                    <div className="p-4 bg-brand-sand rounded-lg transform -rotate-2 hover:rotate-0 transition-transform duration-300">
+                    <div className="p-4 bg-white rounded-lg transform -rotate-2 hover:rotate-0 transition-transform duration-300 shadow-lg border">
                         <h3 className="font-bold text-brand-jungle">Phrase of the Day</h3>
                         <p className="font-handwriting text-2xl my-2 text-brand-accent">"Một, hai, ba, dzô!"</p>
                         <p className="text-sm text-gray-600">(Means "1, 2, 3, cheers!") Use when celebrating that you survived crossing the street in Hanoi.</p>
                     </div>
-                    <div className="p-4 bg-brand-sand rounded-lg transform rotate-1 hover:rotate-0 transition-transform duration-300">
+                    <div className="p-4 bg-white rounded-lg transform rotate-1 hover:rotate-0 transition-transform duration-300 shadow-lg border">
                         <h3 className="font-bold text-brand-jungle">Traveler's Joke</h3>
                         <p className="text-lg my-2 text-brand-charcoal">Why did the tourist get kicked out of the noodle shop?</p>
 
                         <p className="text-sm text-gray-600">For trying to pay with a credit <i className="font-semibold">pho</i>-ne!</p>
                     </div>
-                    <div className="p-4 bg-brand-sand rounded-lg transform -rotate-1 hover:rotate-0 transition-transform duration-300">
+                    <div className="p-4 bg-white rounded-lg transform -rotate-1 hover:rotate-0 transition-transform duration-300 shadow-lg border">
                         <h3 className="font-bold text-brand-jungle">Pro Packing Tip</h3>
                         <p className="text-lg my-2 text-brand-charcoal">Roll, Don't Fold</p>
                         <p className="text-sm text-gray-600">Roll your clothes to save space and prevent wrinkles. This also leaves more room for souvenirs you probably don't need.</p>
@@ -1125,29 +1188,60 @@ const FunSection: React.FC = () => {
 
 
 const App: React.FC = () => {
-    const [openDay, setOpenDay] = useState<number | null>(1);
+    const [openDay, setOpenDay] = useState<number | null>(null);
     const [isFlightSectionOpen, setIsFlightSectionOpen] = useState(false);
     const [isVisaSectionOpen, setIsVisaSectionOpen] = useState(false);
     const [scrollY, setScrollY] = useState(0);
+    const [scrollProgress, setScrollProgress] = useState(0);
+    const dayRefs = useRef<(HTMLDivElement | null)[]>([]);
 
     const handleScroll = () => {
-        setScrollY(window.scrollY);
+        const currentScrollY = window.scrollY;
+        setScrollY(currentScrollY);
+
+        const totalScrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+        if (totalScrollableHeight > 0) {
+            const progress = (currentScrollY / totalScrollableHeight) * 100;
+            setScrollProgress(progress);
+        } else {
+            setScrollProgress(0);
+        }
     };
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll, { passive: true });
+        
+        const progressBar = document.getElementById('scroll-progress-bar');
+        if (progressBar) {
+            progressBar.style.width = `${scrollProgress}%`;
+        }
+
         return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+    }, [scrollY, scrollProgress]);
 
     const handleToggle = (day: number) => {
-        setOpenDay(openDay === day ? null : day);
+        const newOpenDay = openDay === day ? null : day;
+        setOpenDay(newOpenDay);
+
+        if (newOpenDay !== null) {
+            setTimeout(() => {
+                const dayElement = dayRefs.current[day - 1];
+                if (dayElement) {
+                     const topPosition = dayElement.getBoundingClientRect().top + window.scrollY - 16; // 16px offset from top
+                     window.scrollTo({
+                         top: topPosition,
+                         behavior: 'smooth'
+                     });
+                }
+            }, 500); // Wait for accordion animation to start
+        }
     };
 
     const [month, year] = TRIP_DATA.tourOverview.travelDate.split(' ');
     const startDate = new Date(`${month} 13, ${year}`);
     
     return (
-        <div className="min-h-screen font-sans text-brand-charcoal bg-brand-sand">
+        <div className="min-h-screen font-sans text-brand-charcoal">
             <header className="relative h-[22rem] overflow-hidden">
                 <div className="absolute inset-0">
                     <img 
@@ -1165,7 +1259,7 @@ const App: React.FC = () => {
                                 Amazing Vietnam
                             </span>
                             <span
-                                className="text-7xl md:text-8xl font-script font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-sun to-yellow-400 transform -rotate-6 -mt-8"
+                                className="text-7xl md:text-8xl font-script font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-sun to-yellow-400 animate-shimmer bg-[length:200%_auto] transform -rotate-6 -mt-8"
                                 style={{ textShadow: '2px 2px 10px rgba(0,0,0,0.5)' }}
                             >
                                 9 Day Tour
@@ -1181,14 +1275,14 @@ const App: React.FC = () => {
                         <div className="flex flex-wrap items-center justify-center gap-4">
                             <button 
                                 onClick={() => { setIsFlightSectionOpen(!isFlightSectionOpen); setIsVisaSectionOpen(false); }}
-                                className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-semibold rounded-full shadow-lg text-brand-jungle bg-brand-sun hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-brand-sun transition-all duration-300 transform hover:scale-105 active:scale-100"
+                                className="inline-flex items-center justify-center px-5 py-2.5 border-2 border-brand-sun text-sm font-semibold rounded-full shadow-lg text-brand-sun bg-brand-jungle/50 backdrop-blur-sm hover:bg-brand-sun hover:text-brand-jungle focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-brand-sun transition-all duration-300 transform hover:scale-105 active:scale-100"
                             >
                                 <TicketIcon className="w-5 h-5 mr-2 -ml-1" />
                                 Flight E-Tickets
                             </button>
                              <button 
                                 onClick={() => { setIsVisaSectionOpen(!isVisaSectionOpen); setIsFlightSectionOpen(false); }}
-                                className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-semibold rounded-full shadow-lg text-brand-jungle bg-brand-sun hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-brand-sun transition-all duration-300 transform hover:scale-105 active:scale-100"
+                                className="inline-flex items-center justify-center px-5 py-2.5 border-2 border-brand-sun text-sm font-semibold rounded-full shadow-lg text-brand-sun bg-brand-jungle/50 backdrop-blur-sm hover:bg-brand-sun hover:text-brand-jungle focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-brand-sun transition-all duration-300 transform hover:scale-105 active:scale-100"
                             >
                                 <PassportIcon className="w-5 h-5 mr-2 -ml-1" />
                                 Visa
@@ -1197,7 +1291,7 @@ const App: React.FC = () => {
                                 href="https://drive.google.com/drive/u/3/folders/1xs1eDOhKS9Z7GKdvtEJTkXnEEZgkNA9E"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-semibold rounded-full shadow-lg text-brand-jungle bg-brand-sun hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-brand-sun transition-all duration-300 transform hover:scale-105 active:scale-100"
+                                className="inline-flex items-center justify-center px-5 py-2.5 border-2 border-brand-sun text-sm font-semibold rounded-full shadow-lg text-brand-sun bg-brand-jungle/50 backdrop-blur-sm hover:bg-brand-sun hover:text-brand-jungle focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-brand-sun transition-all duration-300 transform hover:scale-105 active:scale-100"
                             >
                                 <DocumentTextIcon className="w-5 h-5 mr-2 -ml-1" />
                                 All Docs
@@ -1245,14 +1339,16 @@ const App: React.FC = () => {
 
                             return (
                                 <AnimatedSection key={plan.day}>
-                                    <DayAccordion 
-                                        dayPlan={plan} 
-                                        isOpen={openDay === plan.day} 
-                                        onClick={() => handleToggle(plan.day)}
-                                        prevDestination={prevPlan ? prevPlan.destination : null}
-                                        shortDate={shortDate}
-                                        weekday={weekday}
-                                    />
+                                    <div ref={el => dayRefs.current[index] = el}>
+                                        <DayAccordion 
+                                            dayPlan={plan} 
+                                            isOpen={openDay === plan.day} 
+                                            onClick={() => handleToggle(plan.day)}
+                                            prevDestination={prevPlan ? prevPlan.destination : null}
+                                            shortDate={shortDate}
+                                            weekday={weekday}
+                                        />
+                                    </div>
                                 </AnimatedSection>
                             )
                         })}
