@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import L from 'leaflet';
 import { TRIP_DATA, CURRENCY_RATES } from './constants';
 import type { DayPlan, TourOverview, GuestDetails, Accommodation, TourCost, InclusionsExclusions, TermsAndConditions, FlightData, VisaInfo, HotelStay } from './types';
@@ -132,14 +132,6 @@ const InformationCircleIcon = ({ className = "w-6 h-6" }: { className?: string }
 const TicketIcon = ({ className = "w-5 h-5" }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5 4a3 3 0 00-3 3v6a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H5zm-1 9v-1h5v2H5a1 1 0 01-1-1zm7 1h4a1 1 0 001-1v-1h-5v2zm0-4h5V8h-5v2zM4 9h5V7H4v2z" clipRule="evenodd" /></svg>;
 const PassportIcon = ({ className = "w-5 h-5" }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M20 5H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zM4 17V7h16v10H4zm6-7H8v4h2v-4zm4 0h-2v4h2v-4zm4 0h-2v4h2v-4z"/><circle cx="12" cy="10.5" r="1.5"/><path d="M12 14c-1.65 0-3 1.35-3 3h6c0-1.65-1.35-3-3-3z"/></svg>;
 const ShirtIcon = ({ className = "w-5 h-5" }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c-2.4 0-4.47 1.63-4.92 3.82L6.15 9.5c-.22.61.02 1.29.57 1.72l4.13 3.27c.45.36 1.09.36 1.54 0l4.13-3.27c.55-.43.79-1.11.57-1.72l-.93-3.68C16.47 3.63 14.4 2 12 2zm-1.94 13.91L5 19v2h14v-2l-5.06-3.09c-.58.37-1.25.59-1.94.59s-1.36-.22-1.94-.59z"/></svg>;
-const PassportStampIcon = ({ className = "w-16 h-16" }: { className?: string }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className={className}>
-        <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" strokeWidth="4" strokeDasharray="10 5" />
-        <text x="50" y="40" fontFamily="sans-serif" fontSize="14" fontWeight="bold" textAnchor="middle" fill="currentColor" transform="rotate(-15 50 50)">APPROVED</text>
-        <path d="M30 45 L45 60 L70 35" stroke="currentColor" strokeWidth="5" fill="none" strokeLinecap="round" strokeLinejoin="round" transform="rotate(-15 50 50)" />
-        <text x="50" y="70" fontFamily="sans-serif" fontSize="10" fontWeight="bold" textAnchor="middle" fill="currentColor" transform="rotate(-15 50 50)">WANDERLUST DEPT.</text>
-    </svg>
-);
 const WalletIcon = ({ className = "w-6 h-6" }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}><path d="M18 4H6C3.79 4 2 5.79 2 8v8c0 2.21 1.79 4 4 4h12c2.21 0 4-1.79 4-4V8c0-2.21-1.79-4-4-4zm-1 11h-4c-.55 0-1-.45-1-1s.45-1 1-1h4c.55 0 1 .45 1 1s-.45 1-1 1zm3-4H4V8c0-1.1.9-2 2-2h12c1.1 0 2 .9 2 2v3z" /></svg>;
 const CalendarDaysIcon = ({ className = "w-6 h-6" }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 002 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM7 12h5v5H7z" /></svg>;
 const ExclamationTriangleIcon = ({ className = "w-6 h-6" }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" /></svg>;
@@ -152,8 +144,50 @@ const DocumentTextIcon = ({ className = "w-5 h-5" }: { className?: string }) => 
 
 // --- Currency Flags ---
 const UsaFlagIcon = ({ className = "w-6 h-5 rounded-sm" }: { className?: string }) => (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 48" className={className}><path fill="#b22234" d="M0 0h72v48H0z"/><path fill="#fff" d="M0 4h72v4H0zm0 8h72v4H0zm0 8h72v4H0zm0 8h72v4H0zm0 8h72v4H0z"/><path fill="#3c3b6e" d="M0 0h36v28H0z"/><path fill="#fff" d="M6 3.5L4.5 8l-3.5-2.5 4 1-1.5 4 2.5-3.5 2.5 3.5-1.5-4 4-1-3.5 2.5zm12 0L16.5 8l-3.5-2.5 4 1-1.5 4 2.5-3.5 2.5 3.5-1.5-4 4-1-3.5 2.5zm12 0L28.5 8l-3.5-2.5 4 1-1.5 4 2.5-3.5 2.5 3.5-1.5-4 4-1-3.5 2.5zM6 10.5l-1.5 4.5-3.5-2.5 4 1-1.5 4 2.5-3.5 2.5 3.5-1.5-4 4-1-3.5 2.5zm12 0l-1.5 4.5-3.5-2.5 4 1-1.5 4 2.5-3.5 2.5 3.5-1.5-4 4-1-3.5 2.5zm12 0l-1.5 4.5-3.5-2.5 4 1-1.5 4 2.5-3.5 2.5 3.5-1.5-4 4-1-3.5 2.5zM6 17.5l-1.5 4.5-3.5-2.5 4 1-1.5 4 2.5-3.5 2.5 3.5-1.5-4 4-1-3.5 2.5zm12 0l-1.5 4.5-3.5-2.5 4 1-1.5 4 2.5-3.5 2.5 3.5-1.5-4 4-1-3.5 2.5zm12 0l-1.5 4.5-3.5-2.5 4 1-1.5 4 2.5-3.5 2.5 3.5-1.5-4 4-1-3.5 2.5z"/></svg>);
-const IndiaFlagIcon = ({ className = "w-6 h-5 rounded-sm" }: { className?: string }) => (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" className={className}><path fill="#f93" d="M0 0h900v200H0z"/><path fill="#fff" d="M0 200h900v200H0z"/><path fill="#128807" d="M0 400h900v200H0z"/><circle cx="450" cy="300" r="80" fill="#000080"/><circle cx="450" cy="300" r="70" fill="#fff"/><circle cx="450" cy="300" r="20" fill="#000080"/><path fill="#000080" d="M450 220l-10 30h20zm0 160l10-30H440zm-80-80l30 10v-20zm160 0l-30-10v20zM352.2 242.2l21.2 21.2-14.1 14.1-21.2-21.2zm195.6 195.6l-21.2-21.2 14.1-14.1 21.2 21.2zM352.2 357.8l-21.2 21.2 14.1 14.1 21.2-21.2zM547.8 242.2l21.2-21.2-14.1-14.1-21.2 21.2z"/></svg>);
+const IndiaFlagIcon = ({ className = "w-6 h-5 rounded-sm" }: { className?: string }) => (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" className={className}><path fill="#f93" d="M0 0h900v200H0z"/><path fill="#fff" d="M0 200h900v200H0z"/><path fill="#128807" d="M0 400h900v200H0z"/><circle cx="450" cy="300" r="80" fill="#000080"/><circle cx="450" cy="300" r="70" fill="#fff"/><circle cx="450"cy="300" r="20" fill="#000080"/><path fill="#000080" d="M450 220l-10 30h20zm0 160l10-30H440zm-80-80l30 10v-20zm160 0l-30-10v20zM352.2 242.2l21.2 21.2-14.1 14.1-21.2-21.2zm195.6 195.6l-21.2-21.2 14.1-14.1 21.2 21.2zM352.2 357.8l-21.2 21.2 14.1 14.1 21.2-21.2zM547.8 242.2l21.2-21.2-14.1-14.1-21.2 21.2z"/></svg>);
 const VietnamFlagIcon = ({ className = "w-6 h-5 rounded-sm" }: { className?: string }) => (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" className={className}><path fill="#da251d" d="M0 0h600v400H0z"/><path fill="#ff0" d="M300 115.5l58.8 180.9-153.8-111.8h190L241.2 296.4z"/></svg>);
+
+const TimezoneClocks: React.FC = () => {
+    const [indiaTime, setIndiaTime] = useState('');
+    const [vietnamTime, setVietnamTime] = useState('');
+
+    useEffect(() => {
+        const updateClocks = () => {
+            const now = new Date();
+            setIndiaTime(now.toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true }));
+            setVietnamTime(now.toLocaleTimeString('en-US', { timeZone: 'Asia/Ho_Chi_Minh', hour: '2-digit', minute: '2-digit', hour12: true }));
+        };
+
+        updateClocks(); // Initial call
+        const timerId = setInterval(updateClocks, 1000);
+
+        return () => clearInterval(timerId); // Cleanup
+    }, []);
+
+    const ClockDisplay = ({ flag, time }: { flag: React.ReactNode, time: string }) => (
+        <div className="flex items-center justify-between gap-2 p-2 bg-brand-sand/50 rounded-lg shadow-inner border w-full">
+            {flag}
+            <p className="text-sm sm:text-base font-bold font-mono text-brand-accent tracking-tight whitespace-nowrap">
+                {time || <span className="opacity-50">--:-- --</span>}
+            </p>
+        </div>
+    );
+
+    return (
+        <div className="p-1 bg-gradient-to-br from-brand-sky via-brand-sun to-brand-accent rounded-2xl shadow-lg">
+            <div className="relative bg-white rounded-xl p-4">
+                 <div className="flex items-center justify-center mb-3">
+                    <ClockIcon className="w-6 h-6 text-brand-jungle mr-3" />
+                    <h3 className="text-xl font-bold font-handwriting text-brand-charcoal">Current Local Times</h3>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                    <ClockDisplay flag={<IndiaFlagIcon className="w-7 h-5 rounded-sm" />} time={indiaTime} />
+                    <ClockDisplay flag={<VietnamFlagIcon className="w-7 h-5 rounded-sm" />} time={vietnamTime} />
+                </div>
+            </div>
+        </div>
+    );
+};
 
 // --- TIMELINE HELPER ---
 const getActivityVisuals = (activity: string) => {
@@ -198,6 +232,7 @@ const InteractiveMap: React.FC<{
     const mapRef = useRef<L.Map | null>(null);
     const markersRef = useRef<(L.Marker | null)[]>([]);
 
+    // Effect for map initialization. Runs once on mount.
     useEffect(() => {
         if (mapContainerRef.current && !mapRef.current) {
             const map = L.map(mapContainerRef.current, {
@@ -224,8 +259,8 @@ const InteractiveMap: React.FC<{
 
                 const latLng = L.latLng(plan.coords[0], plan.coords[1]);
                 
-                const isActive = openDay === plan.day;
-                const iconHtml = `<div class="font-bold font-sans text-sm transition-all duration-300 ${isActive ? 'bg-brand-accent text-white scale-125 animate-pulse-slow shadow-2xl' : 'bg-white text-brand-accent opacity-80'} w-8 h-8 rounded-full flex items-center justify-center shadow-lg border-2 border-white">${plan.day}</div>`;
+                // All markers are created with the default style. The update effect will handle active state.
+                const iconHtml = `<div class="font-bold font-sans text-sm transition-all duration-300 bg-white text-brand-accent opacity-80 w-8 h-8 rounded-full flex items-center justify-center shadow-lg border-2 border-white">${plan.day}</div>`;
                 
                 const customIcon = L.divIcon({
                     html: iconHtml,
@@ -262,6 +297,7 @@ const InteractiveMap: React.FC<{
         };
     }, []); 
 
+    // Effect for handling updates when `openDay` changes.
     useEffect(() => {
         if (!mapRef.current) return;
 
@@ -308,7 +344,7 @@ const InteractiveMap: React.FC<{
              }
         }
 
-    }, [openDay, dayPlans]);
+    }, [openDay, dayPlans, onMarkerClick]);
 
 
     return (
@@ -394,21 +430,20 @@ const TimelineItem: React.FC<{ activity: string; index: number; isOpen: boolean,
     switch (visualInfo.type) {
         case 'MAJOR_TRAVEL':
             timelineElement = (
-                 <div className={`${baseIconHolderClass}`}>
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center bg-brand-sky text-white shadow-inner">
+                 <div className={`${baseIconHolderClass} border-amber-300`}>
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center bg-amber-200 text-amber-800 shadow-inner">
                         {React.cloneElement(visualInfo.icon, { className: "w-5 h-5" })}
                     </div>
                 </div>
             );
             contentContainer = (
-                 <div className={`${baseCardClass} bg-sky-100 p-4 rounded-lg shadow-lg hover:shadow-xl hover:-translate-y-1 transform -rotate-1 hover:rotate-0 border-l-8 border-sky-300`}>
-                    <div className="flex items-start">
-                        <div className="w-8 h-8 rounded-full border-2 border-dashed border-sky-400 flex items-center justify-center mr-3 flex-shrink-0">
-                            {React.cloneElement(visualInfo.icon, { className: "w-5 h-5 text-sky-600" })}
-                        </div>
-                        <div>
-                            <h5 className="font-bold font-sans text-sky-700 uppercase text-xs tracking-wider">{visualInfo.details}</h5>
-                            <p className="text-gray-700 text-sm mt-1">{description}</p>
+                 <div className={`${baseCardClass} bg-amber-100 rounded-lg shadow-lg transform -rotate-2`}>
+                    {/* Luggage Tag design */}
+                    <div className="relative p-4 border-l-8 border-dashed border-amber-300/80">
+                         <div className="absolute top-1/2 -left-3 -translate-y-1/2 w-6 h-6 rounded-full bg-white border-4 border-amber-200 ring-2 ring-amber-100"></div>
+                        <div className="flex flex-col sm:flex-row sm:items-baseline ml-4 gap-x-3">
+                            <h5 className="font-bold font-sans text-amber-800 uppercase text-xs tracking-wider mb-1 sm:mb-0 sm:flex-shrink-0">{visualInfo.details}</h5>
+                            <p className="text-gray-700 text-sm">{description}</p>
                         </div>
                     </div>
                 </div>
@@ -422,17 +457,18 @@ const TimelineItem: React.FC<{ activity: string; index: number; isOpen: boolean,
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-sun opacity-75"></span>
                     </span>
                     <div className="relative w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-brand-sun to-yellow-400 text-brand-jungle shadow-lg">
-                        {React.cloneElement(visualInfo.icon, { className: "w-6 h-6" })}
+                        <StarIcon className="w-6 h-6" />
                     </div>
                 </div>
             );
             contentContainer = (
-                <div className={`${baseCardClass} bg-white p-3 pb-8 rounded-md shadow-xl hover:shadow-2xl hover:-translate-y-1 transform rotate-2 hover:rotate-1`}>
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-6 bg-yellow-200/50 backdrop-blur-sm border border-yellow-300/50 rounded-sm opacity-70 transform -rotate-3 z-20"></div>
-                    <div className="relative">
-                        <h5 className="font-bold font-sans text-brand-jungle uppercase text-xs tracking-wider">Highlight</h5>
-                        <p className="font-handwriting text-brand-charcoal text-2xl mt-1">{visualInfo.title}</p>
-                        <p className="text-gray-600 mt-2 text-xs">{description}</p>
+                 <div className={`${baseCardClass} bg-white rounded-lg shadow-xl transform rotate-2`}>
+                    <div className="absolute -top-1 -left-1 w-12 h-12 bg-brand-sun rounded-tl-lg rounded-br-2xl flex items-center justify-center text-brand-jungle shadow-md z-10">
+                        {React.cloneElement(visualInfo.icon, { className: "w-7 h-7" })}
+                    </div>
+                    <div className="p-4 pl-16">
+                         <h5 className="font-handwriting text-brand-charcoal text-2xl">{visualInfo.title}</h5>
+                         <p className="text-gray-500 mt-1 text-xs leading-tight font-sans">{description}</p>
                     </div>
                 </div>
             );
@@ -440,13 +476,12 @@ const TimelineItem: React.FC<{ activity: string; index: number; isOpen: boolean,
 
         case 'TRANSITION':
             timelineElement = (
-                <div className="z-10 w-12 h-12 rounded-full flex items-center justify-center">
+                <div className="z-10 w-12 h-12 flex items-center justify-center">
                     <div className="w-2.5 h-2.5 bg-gray-300 rounded-full border-2 border-white shadow-sm"></div>
                 </div>
             );
             contentContainer = (
-                <div className="flex items-center h-12 -mt-1 pl-2">
-                    {time && <p className="text-xs font-semibold text-gray-500 mr-4 bg-gray-100 px-2 py-0.5 rounded-full">{time.split('-')[0]}</p>}
+                 <div className="flex items-center h-12 -mt-6">
                     <p className="text-gray-500 text-sm italic tracking-wide">{description}</p>
                 </div>
             );
@@ -454,12 +489,12 @@ const TimelineItem: React.FC<{ activity: string; index: number; isOpen: boolean,
 
         default: // ACTIVITY
              const colors = [
-                { border: 'border-brand-accent', bg: 'bg-red-50', text: 'text-brand-accent' },
-                { border: 'border-brand-sky', bg: 'bg-blue-50', text: 'text-brand-sky' },
-                { border: 'border-brand-jungle', bg: 'bg-emerald-50', text: 'text-brand-jungle' },
+                { border: 'border-red-300', bg: 'bg-red-100/70', text: 'text-red-700' },
+                { border: 'border-blue-300', bg: 'bg-blue-100/70', text: 'text-blue-700' },
+                { border: 'border-green-300', bg: 'bg-green-100/70', text: 'text-green-700' },
             ];
             const color = colors[index % colors.length];
-            const rotation = ['rotate-1', '-rotate-1', 'rotate-2'][index % 3];
+            const rotation = ['-rotate-2', 'rotate-1', '-rotate-1'][index % 3];
 
             timelineElement = (
                  <div className={`${baseIconHolderClass}`}>
@@ -469,7 +504,7 @@ const TimelineItem: React.FC<{ activity: string; index: number; isOpen: boolean,
                 </div>
             );
             contentContainer = (
-                 <div className={`${baseCardClass} ${color.bg} p-4 rounded-lg shadow-lg hover:shadow-xl hover:-translate-y-1 transform ${rotation} hover:rotate-0 border-l-4 ${color.border}`}>
+                 <div className={`${baseCardClass} ${color.bg} p-4 rounded-lg shadow-lg transform ${rotation} border-t-4 ${color.border}`}>
                      <div className="flex items-center">
                         <div>
                             {time && <p className={`text-xs font-bold ${color.text} mb-1`}>{time.split('-')[0]}</p>}
@@ -480,19 +515,28 @@ const TimelineItem: React.FC<{ activity: string; index: number; isOpen: boolean,
             );
             break;
     }
+    
+    const wrapperClasses = `flex min-h-[6rem] ${isTransition ? 'min-h-[3.5rem]' : ''}`;
+    const contentWrapperClasses = `flex-grow ${isTransition ? 'pt-0' : 'pt-2 pb-8'} w-full flex items-center transform ${isOpen ? 'animate-place-in' : 'opacity-0'}`;
 
     return (
-        <div className="flex min-h-[6rem]">
-            <div className="flex flex-col items-center mr-4">
-                {timelineElement}
+        <div className={wrapperClasses}>
+             <div className="flex flex-col items-center mr-4">
+                <div 
+                    className={`transition-opacity duration-300 ${isOpen ? 'animate-pop-in' : 'opacity-0'}`}
+                    style={{ animationDelay: `${isOpen ? index * 80 : 0}ms` }}
+                >
+                    {timelineElement}
+                </div>
                 {!isLast && (
-                    <div className={`w-0.5 flex-grow bg-gradient-to-b from-brand-sky via-brand-jungle to-brand-accent transition-transform duration-700 ease-out origin-top ${isOpen ? 'scale-y-100' : 'scale-y-0'}`} 
-                         style={{ transitionDelay: `${isOpen ? index * 50 : 0}ms` }}
+                    <div 
+                        className={`w-0.5 flex-grow bg-gray-300 transition-transform duration-700 ease-out origin-top ${isOpen ? 'scale-y-100' : 'scale-y-0'}`} 
+                        style={{ transitionDelay: `${isOpen ? index * 50 + 200 : 0}ms` }}
                     />
                 )}
             </div>
             <div
-                className={`flex-grow ${isTransition ? 'pt-0' : 'pt-2 pb-8'} w-full flex items-center transform ${isOpen ? 'animate-place-in' : 'opacity-0'}`}
+                className={contentWrapperClasses}
                 style={{ animationDelay: `${isOpen ? index * 100 + 100 : 0}ms` }}
             >
                 {contentContainer}
@@ -500,6 +544,7 @@ const TimelineItem: React.FC<{ activity: string; index: number; isOpen: boolean,
         </div>
     );
 };
+
 
 const ActivityTimeline: React.FC<{ activities: string[], isOpen: boolean }> = ({ activities, isOpen }) => {
     return (
@@ -517,38 +562,14 @@ const ActivityTimeline: React.FC<{ activities: string[], isOpen: boolean }> = ({
     );
 };
 
+const LocationHeader: React.FC<{ destination: string }> = ({ destination }) => {
+    const primaryDestination = destination.split(' & ')[0];
 
-const TravelStatusHeader: React.FC<{ currentDestination: string; prevDestination: string | null }> = ({ currentDestination, prevDestination }) => {
-    if (!prevDestination) {
-        return (
-             <div className="flex items-center p-3 mb-4 rounded-lg bg-brand-jungle/10 border border-brand-jungle/20">
-                <MapPinIcon className="w-6 h-6 text-brand-jungle mr-3 flex-shrink-0" />
-                <div>
-                    <p className="font-bold text-brand-jungle">Let the Adventure Begin!</p>
-                    <p className="text-sm text-brand-jungle/80">First stop: {currentDestination}</p>
-                </div>
-            </div>
-        );
-    }
-    const isTravelDay = currentDestination !== prevDestination;
-    if (isTravelDay) {
-        return (
-            <div className="flex items-center p-3 mb-4 rounded-lg bg-brand-accent/10 border border-brand-accent/20">
-                <SuitcaseIcon className="w-6 h-6 text-brand-accent mr-3 flex-shrink-0" />
-                <div>
-                    <p className="font-bold text-brand-accent">On The Move!</p>
-                    <p className="text-sm text-brand-accent/80">From {prevDestination.split(' & ')[0]} to {currentDestination.split(' & ')[0]}</p>
-                </div>
-            </div>
-        );
-    }
     return (
-        <div className="flex items-center p-3 mb-4 rounded-lg bg-brand-sky/10 border border-brand-sky/20">
-            <MapPinIcon className="w-6 h-6 text-brand-sky mr-3 flex-shrink-0" />
-            <div>
-                <p className="font-bold text-brand-sky">Exploring {currentDestination}</p>
-                <p className="text-sm text-brand-sky/80">Still in the area, more to see!</p>
-            </div>
+        <div className="flex items-baseline justify-center gap-2 p-2 mb-4 rounded-md bg-brand-jungle/5 border border-brand-jungle/10">
+            <MapPinIcon className="w-4 h-4 text-brand-jungle/80" />
+            <p className="text-xs font-bold uppercase tracking-wider text-brand-charcoal/70">Location:</p>
+            <p className="font-script text-xl text-brand-accent leading-tight">{primaryDestination}</p>
         </div>
     );
 };
@@ -637,14 +658,16 @@ const DayAccordion: React.FC<{ dayPlan: DayPlan; isOpen: boolean; onClick: () =>
 
     return (
         <div className={`transition-all duration-500 ${isOpen ? 'pb-4' : ''}`}>
-            <div className={`p-0.5 bg-gradient-to-br from-brand-sun via-brand-accent to-brand-sky rounded-2xl transition-all duration-500 transform-preserve-3d ${isOpen ? '[transform:rotateX(5deg)]' : 'hover:shadow-xl'} ${highlightGlowClass}`}>
+            <div className={`p-0.5 bg-gradient-to-br from-brand-sun via-brand-accent to-brand-sky rounded-2xl transition-all duration-500 ${isOpen ? '' : 'hover:shadow-xl'} ${highlightGlowClass}`}>
                 <button onClick={onClick} className="w-full text-left relative block group rounded-[14px] overflow-hidden" aria-expanded={isOpen}>
                     {/* Background Image & Overlay */}
-                    <img
-                        src={dayPlan.imageUrl}
-                        alt={dayPlan.title}
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
-                    />
+                    <div className="absolute inset-0 w-full h-full overflow-hidden">
+                        <img
+                            src={dayPlan.imageUrl}
+                            alt={dayPlan.title}
+                            className={`absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-in-out ${isOpen ? 'scale-110' : ''}`}
+                        />
+                    </div>
                     <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent"></div>
 
                     {/* Content */}
@@ -675,7 +698,6 @@ const DayAccordion: React.FC<{ dayPlan: DayPlan; isOpen: boolean; onClick: () =>
             <div className={`grid transition-all duration-700 ease-in-out ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
                 <div className="overflow-hidden">
                     <div className="p-4 sm:p-6 bg-gradient-to-b from-brand-sand via-white to-brand-sand/70 rounded-b-2xl shadow-inner-lg -mt-2 relative">
-                        {isOpen && <div className="absolute top-4 right-4 text-brand-accent/50 opacity-0 animate-stamp-in"><PassportStampIcon/></div>}
                         <div className="text-center mb-6 border-b border-brand-jungle/10 pb-4">
                             <div className="flex items-center justify-center gap-2 mt-2 px-4">
                                 {dayPlan.isHighlight && (
@@ -686,8 +708,9 @@ const DayAccordion: React.FC<{ dayPlan: DayPlan; isOpen: boolean; onClick: () =>
                                 <h3 className="text-xs font-bold font-sans text-brand-charcoal/90">{dayPlan.title}</h3>
                             </div>
                         </div>
-                        <TravelStatusHeader currentDestination={dayPlan.destination} prevDestination={prevDestination} />
                         
+                        <LocationHeader destination={dayPlan.destination} />
+
                         {isOpen && dayUseHotelForThisDay && (
                             <div 
                                 className={`transition-all duration-500 transform ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
@@ -708,10 +731,17 @@ const DayAccordion: React.FC<{ dayPlan: DayPlan; isOpen: boolean; onClick: () =>
 
                         <div className="grid md:grid-cols-3 gap-6">
                             <div className="md:col-span-2">
-                                <h4 className="text-lg font-bold mb-4 text-brand-charcoal flex items-center gap-2">
-                                    <ClipboardListIcon className="w-5 h-5 text-brand-jungle"/>
-                                    Your Daily Mission
-                                </h4>
+                                <div className="relative p-4 mb-4 rounded-lg bg-white shadow-sm border border-brand-jungle/20 overflow-hidden">
+                                    <div className="flex items-center">
+                                        <div className="p-2 bg-brand-jungle/10 rounded-full mr-4">
+                                            <ClipboardListIcon className="w-6 h-6 text-brand-jungle"/>
+                                        </div>
+                                        <div>
+                                            <h4 className="text-xl font-bold text-brand-charcoal">Your Daily Mission</h4>
+                                            <p className="text-sm text-gray-500">Your objectives for today.</p>
+                                        </div>
+                                    </div>
+                                </div>
                                 <ActivityTimeline activities={dayPlan.activities} isOpen={isOpen} />
                             </div>
                             <div className="space-y-6">
@@ -891,7 +921,7 @@ const FlightTicketsSection: React.FC<{ flightData: FlightData; isOpen: boolean; 
                                     <div key={routeData.route} className="flex flex-col items-center">
                                         <button
                                             onClick={() => handleRouteToggle(routeData.route)}
-                                            className="w-full inline-flex items-center justify-center px-5 py-2 rounded-full bg-brand-jungle text-white font-bold text-sm shadow-md border-2 border-transparent hover:bg-brand-sun hover:text-brand-jungle transform transition-all duration-300 ease-in-out hover:scale-105 group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-sun"
+                                            className="w-full inline-flex items-center justify-center px-5 py-2 rounded-full bg-brand-jungle text-white font-bold text-sm shadow-md border-2 border-transparent hover:bg-brand-sun hover:text-brand-jungle transform transition-all duration-300 ease-in-out hover:scale-105 active:scale-100 group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-sun"
                                             aria-expanded={isRouteExpanded}
                                         >
                                             <span className="mr-2">{routeData.route}</span>
@@ -908,7 +938,7 @@ const FlightTicketsSection: React.FC<{ flightData: FlightData; isOpen: boolean; 
                                                     {routeData.tickets.map((ticket, tIndex) => (
                                                         <a
                                                             key={tIndex} href={ticket.url} target="_blank" rel="noopener noreferrer"
-                                                            className="inline-flex items-center justify-center px-3 py-1.5 rounded-full bg-brand-jungle text-white font-bold text-xs shadow-md border-2 border-transparent hover:bg-brand-sun hover:text-brand-jungle transform transition-all duration-300 ease-in-out hover:scale-105 group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-sun"
+                                                            className="inline-flex items-center justify-center px-3 py-1.5 rounded-full bg-brand-jungle text-white font-bold text-xs shadow-md border-2 border-transparent hover:bg-brand-sun hover:text-brand-jungle transform transition-all duration-300 ease-in-out hover:scale-105 active:scale-100 group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-sun"
                                                         >
                                                             <TicketIcon className="mr-2 h-4 w-4 opacity-80 group-hover:text-brand-jungle transition-colors flex-shrink-0" />
                                                             <span>{ticket.passengers}</span>
@@ -945,7 +975,7 @@ const VisaSection: React.FC<{ visaData: VisaInfo[]; isOpen: boolean; onClose: ()
                                     href={visa.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className={`inline-flex items-center justify-center px-3 py-1.5 rounded-full bg-brand-jungle text-white font-bold text-xs shadow-md border-2 border-transparent hover:bg-brand-sun hover:text-brand-jungle transform transition-all duration-300 ease-in-out hover:scale-105 group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-sun ${isOpen ? 'animate-fade-in-up' : 'opacity-0'}`}
+                                    className={`inline-flex items-center justify-center px-3 py-1.5 rounded-full bg-brand-jungle text-white font-bold text-xs shadow-md border-2 border-transparent hover:bg-brand-sun hover:text-brand-jungle transform transition-all duration-300 ease-in-out hover:scale-105 active:scale-100 group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-sun ${isOpen ? 'animate-fade-in-up' : 'opacity-0'}`}
                                     style={{ animationDelay: `${index * 100}ms` }}
                                 >
                                     <PassportIcon className="mr-2 h-4 w-4 opacity-80 group-hover:text-brand-jungle transition-colors" />
@@ -965,7 +995,7 @@ const AccommodationDetails: React.FC<{ accommodation: Accommodation }> = ({ acco
         <p className="mb-8 text-gray-600 text-center">Your home away from home will be in these lovely <strong>{accommodation.category}</strong> hotels.</p>
         <div className="space-y-6">
             {accommodation.hotels.map((hotel, index) => (
-                <div key={index} className="p-4 bg-white rounded-xl shadow-md border border-brand-jungle/10 transition-shadow hover:shadow-lg">
+                <div key={index} className="p-4 bg-white rounded-xl shadow-md border border-brand-jungle/10 transition-all duration-200 hover:shadow-lg active:scale-[0.98] active:shadow-md">
                     <div className="sm:flex sm:items-start sm:justify-between">
                         <div>
                             <div className="flex items-center mb-1">
@@ -1219,24 +1249,30 @@ const App: React.FC = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, [scrollY, scrollProgress]);
 
-    const handleToggle = (day: number) => {
-        const newOpenDay = openDay === day ? null : day;
-        setOpenDay(newOpenDay);
+    const handleToggle = useCallback((day: number) => {
+        setOpenDay(prevOpenDay => (prevOpenDay === day ? null : day));
+    }, []);
 
-        if (newOpenDay !== null) {
-            setTimeout(() => {
-                const dayElement = dayRefs.current[day - 1];
-                if (dayElement) {
-                     const topPosition = dayElement.getBoundingClientRect().top + window.scrollY - 16; // 16px offset from top
-                     window.scrollTo({
-                         top: topPosition,
-                         behavior: 'smooth'
-                     });
-                }
-            }, 500); // Wait for accordion animation to start
-        }
-    };
+    useEffect(() => {
+        if (openDay === null) return;
 
+        // Give the browser a moment to start the accordion animation and update the layout.
+        // This prevents a race condition where we scroll to the element's position *before*
+        // the accordion has expanded.
+        const timer = setTimeout(() => {
+            const dayElement = dayRefs.current[openDay - 1];
+            if (dayElement) {
+                const y = dayElement.getBoundingClientRect().top + window.scrollY - 16;
+                window.scrollTo({
+                    top: y,
+                    behavior: 'smooth',
+                });
+            }
+        }, 100); // 100ms delay is a good balance.
+
+        return () => clearTimeout(timer);
+    }, [openDay]);
+    
     const [month, year] = TRIP_DATA.tourOverview.travelDate.split(' ');
     const startDate = new Date(`${month} 13, ${year}`);
     
@@ -1272,17 +1308,17 @@ const App: React.FC = () => {
                         </p>
                     </AnimatedSection>
                     <AnimatedSection delay={600} className="relative mt-8">
-                        <div className="flex flex-wrap items-center justify-center gap-4">
+                        <div className="flex items-center justify-center flex-wrap gap-2 sm:gap-4">
                             <button 
                                 onClick={() => { setIsFlightSectionOpen(!isFlightSectionOpen); setIsVisaSectionOpen(false); }}
-                                className="inline-flex items-center justify-center px-5 py-2.5 border-2 border-brand-sun text-sm font-semibold rounded-full shadow-lg text-brand-sun bg-brand-jungle/50 backdrop-blur-sm hover:bg-brand-sun hover:text-brand-jungle focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-brand-sun transition-all duration-300 transform hover:scale-105 active:scale-100"
+                                className="inline-flex items-center justify-center px-4 py-2 sm:px-5 sm:py-2.5 border-2 border-brand-sun text-xs sm:text-sm font-semibold rounded-full shadow-lg text-brand-sun bg-brand-jungle/50 backdrop-blur-sm hover:bg-brand-sun hover:text-brand-jungle focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-brand-sun transition-all duration-300 transform hover:scale-105 active:scale-100"
                             >
                                 <TicketIcon className="w-5 h-5 mr-2 -ml-1" />
-                                Flight E-Tickets
+                                Flight E-tickets
                             </button>
                              <button 
                                 onClick={() => { setIsVisaSectionOpen(!isVisaSectionOpen); setIsFlightSectionOpen(false); }}
-                                className="inline-flex items-center justify-center px-5 py-2.5 border-2 border-brand-sun text-sm font-semibold rounded-full shadow-lg text-brand-sun bg-brand-jungle/50 backdrop-blur-sm hover:bg-brand-sun hover:text-brand-jungle focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-brand-sun transition-all duration-300 transform hover:scale-105 active:scale-100"
+                                className="inline-flex items-center justify-center px-4 py-2 sm:px-5 sm:py-2.5 border-2 border-brand-sun text-xs sm:text-sm font-semibold rounded-full shadow-lg text-brand-sun bg-brand-jungle/50 backdrop-blur-sm hover:bg-brand-sun hover:text-brand-jungle focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-brand-sun transition-all duration-300 transform hover:scale-105 active:scale-100"
                             >
                                 <PassportIcon className="w-5 h-5 mr-2 -ml-1" />
                                 Visa
@@ -1291,7 +1327,7 @@ const App: React.FC = () => {
                                 href="https://drive.google.com/drive/u/3/folders/1xs1eDOhKS9Z7GKdvtEJTkXnEEZgkNA9E"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center justify-center px-5 py-2.5 border-2 border-brand-sun text-sm font-semibold rounded-full shadow-lg text-brand-sun bg-brand-jungle/50 backdrop-blur-sm hover:bg-brand-sun hover:text-brand-jungle focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-brand-sun transition-all duration-300 transform hover:scale-105 active:scale-100"
+                                className="inline-flex items-center justify-center px-4 py-2 sm:px-5 sm:py-2.5 border-2 border-brand-sun text-xs sm:text-sm font-semibold rounded-full shadow-lg text-brand-sun bg-brand-jungle/50 backdrop-blur-sm hover:bg-brand-sun hover:text-brand-jungle focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-brand-sun transition-all duration-300 transform hover:scale-105 active:scale-100"
                             >
                                 <DocumentTextIcon className="w-5 h-5 mr-2 -ml-1" />
                                 All Docs
@@ -1313,6 +1349,9 @@ const App: React.FC = () => {
                 </div>
             
                 <div className="space-y-8">
+                    <AnimatedSection>
+                        <TimezoneClocks />
+                    </AnimatedSection>
                     <AnimatedSection>
                         <CurrencyConverter />
                     </AnimatedSection>

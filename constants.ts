@@ -1,4 +1,3 @@
-
 import type { TripData } from './types';
 
 export const CURRENCY_RATES = {
@@ -58,10 +57,7 @@ export const TRIP_DATA: TripData = {
       activities: [
         "12:00: We will pick you up and start by visiting the Non Nuoc Village at the foot of Marble Mountains, famous for its stone sculptures and handicrafts.",
         "Climb the mountain to enjoy peaceful scenery at the temples and explore mysterious caves.",
-        "13:00: Depart for My Son Sanctuary – a World Heritage Site.",
-        "14:45: Arrive at My Son Sanctuary. A 2-hour walking tour will show you historic structures from the 4th to 14th century.",
-        "Enjoy a traditional Champa performance (Aspara Dance) to learn more about the culture.",
-        "16:30: Leave My Son and get back to Danang city.",
+        "13:00: Depart for My Son Sanctuary (a World Heritage Site). Spend approx. 2 hours exploring the historic structures, enjoy a traditional Champa performance (Aspara Dance), and then depart back to Danang city around 16:30.",
       ],
       inclusions: ["Private Car", "Local English-speaking guide", "Entrance fee", "Meals: B", "Hotel in Danang"],
       imageUrl: "https://images.pexels.com/photos/10047385/pexels-photo-10047385.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
