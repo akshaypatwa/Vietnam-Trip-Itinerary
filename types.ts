@@ -76,17 +76,12 @@ export interface TermsAndConditions {
   importantNotes: string[];
 }
 
-export interface FlightTicket {
-  passengers: string;
+export interface FlightInfo {
+  route: string;
   url: string;
 }
 
-export interface FlightRoute {
-  route: string;
-  tickets: FlightTicket[];
-}
-
-export type FlightData = FlightRoute[];
+export type FlightData = FlightInfo[];
 
 export interface VisaInfo {
   name: string;

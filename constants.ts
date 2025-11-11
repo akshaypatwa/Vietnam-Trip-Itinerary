@@ -31,209 +31,185 @@ export const TRIP_DATA: TripData = {
       bannerSummary: "City Tour, Dinner Cruise & Flight to Danang",
       activities: [
         "Our driver and private car will pick you up at the airport, transfer you to the hotel in the city center for early check in and rest.",
-        "13:00: Private Car pick up for a city tour to visit Thien Hau Pagoda in China Town.",
-        "Continue to Bach Dang harbor for a waterbus trip on the Saigon River. Enjoy unique views of Vin homes Central Park, the magnificent Landmark 81 tower, and the Bitexco Financial Tower.",
-        "15:30 - 18:00: Enjoy Bui Vien walking street and then head to the harbor for the Dinner cruise.",
-        "21:30: Our driver will pick you up to the airport for a flight to Da Nang. Upon arrival, a private transfer will take you to your hotel to check-in and relax.",
+        "13:00: Thien Hau Pagoda in China Town: Your first stop on a tour of the city's rich history.",
+        "Continue to Bach Dang harbor for a waterbus trip on the Saigon River, offering unique city views.",
+        "Bitexco Financial Tower: Spot this magnificent, modern skyscraper from the water.",
+        "15:30 to 18:00: Bui Vien walking street: Immerse yourself in the vibrant, energetic heart of the city's nightlife.",
+        "After exploring, head to the harbor for the Dinner cruise.",
+        "21:30: Our driver (no guide) will pick you up and transfer you to the airport for a flight to Da Nang. Upon arrival, a private transfer will take you to your hotel to check-in and relax.",
       ],
       inclusions: ["Private airport transfer", "Early check in at Ho Chi Minh", "Hotel in Danang", "Private Car", "Dinner cruise", "Entrance fee", "English speaking guide in city tour"],
       imageUrl: "https://images.pexels.com/photos/13884824/pexels-photo-13884824.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
       coords: [10.7769, 106.7009],
-      outfitSuggestion: {
-        title: "City Chic & Airport Comfort",
-        points: [
-            "Wear lightweight, breathable fabrics like cotton or linen for the city tour.",
-            "Comfortable walking shoes are a must for exploring.",
-            "Consider bringing a change of clothes or layers for the evening flight to Da Nang."
-        ]
-      }
     },
     {
       day: 2,
       title: "MARBLE MOUNTAIN – MY SON SANCTUARY",
-      destination: "Danang",
+      destination: "Danang -> Hoi An",
       meals: "B",
-      bannerSummary: "Marble Mountains & My Son Sanctuary",
+      bannerSummary: "Marble Mountains & My Son Ruins",
       activities: [
-        "12:00: We will pick you up and start by visiting the Non Nuoc Village at the foot of Marble Mountains, famous for its stone sculptures and handicrafts.",
-        "Climb the mountain to enjoy peaceful scenery at the temples and explore mysterious caves.",
-        "13:00: Depart for My Son Sanctuary (a World Heritage Site). Spend approx. 2 hours exploring the historic structures, enjoy a traditional Champa performance (Aspara Dance), and then depart back to Danang city around 16:30.",
+        "12:00: Your tour begins with a visit to Non Nuoc Village at the foot of the Marble Mountains, renowned for its intricate stone sculptures. Afterwards, ascend the mountain to explore serene temples and awe-inspiring natural caves.",
+        "13:30: Depart from Marble Mountains for My Son Sanctuary, a UNESCO World Heritage site. Enjoy the scenic drive along the coast.",
+        "14:45: Arrive at My Son Sanctuary. An electric car will transfer you to the temple complex. Embark on a 2-hour walking tour with your guide to discover the ruins of the Champa Kingdom and witness a traditional Apsara dance performance.",
+        "16:30: Conclude your visit and transfer to Hoi An. Check into your hotel and enjoy the evening exploring the ancient town.",
       ],
-      inclusions: ["Private Car", "Local English-speaking guide", "Entrance fee", "Meals: B", "Hotel in Danang"],
-      imageUrl: "https://images.pexels.com/photos/10047385/pexels-photo-10047385.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-      coords: [16.0545, 108.2022],
+      inclusions: ["Private Car", "English speaking guide", "Entrance fees"],
+      imageUrl: "https://images.pexels.com/photos/6785293/pexels-photo-6785293.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      coords: [16.005, 108.263],
       outfitSuggestion: {
-          title: "Explorer's Gear",
-          points: [
-              "Modest clothing (shoulders and knees covered) is recommended for visiting sacred sites.",
-              "Sturdy, non-slip shoes are essential for climbing the steps at Marble Mountains.",
-              "Bring a hat and sunglasses for sun protection during the outdoor tours."
-          ]
-      }
+        title: "Respectful & Ready to Climb",
+        points: ["Wear comfortable shoes for walking and climbing stairs.", "Choose respectful attire (covering shoulders and knees) for temples.", "Bring water, a hat, and sunscreen."]
+      },
     },
     {
       day: 3,
       title: "DA NANG – BANA HILLS – HOI AN",
-      destination: "Hoi An",
+      destination: "Danang -> Hoi An",
       meals: "B",
-      bannerSummary: "Ba Na Hills with Golden Bridge",
+      isHighlight: true,
+      bannerSummary: "Walk the iconic Golden Bridge & explore Ba Na Hills",
       activities: [
         "08:30: Meet your guide and driver to head to Ba Na Hills.",
-        "Take a Cable Car ride to visit Vong Nguyet hills, Linh Ung pagoda, and The Old Villas of French.",
-        "Continue by cable car to Nui Chua Mountain, visiting Nghinh Phong top, Le Nim Villas, and Orchid Garden.",
-        "Experience the hill climbing train (funicular) and visit Debay Ancient Wine Cellar and Le Jardin D’amour flower garden.",
-        "Walk on the famous Golden Bridge for amazing and gorgeous views of DA NANG City.",
-        "Afternoon: Free time for joining games in Fantasy Park, the third biggest indoor games zone in Vietnam.",
-        "17:00: Head to your hotel in Hoi An.",
+        "Take a scenic Cable Car ride, stopping at By Night station to visit Vong Nguyet hills, Linh Ung pagoda, and The Old Villas of French.",
+        "Continue by cable car to the top of Nui Chua Mountain, visiting Nghinh Phong top, Le Nim Villas, and the Orchid Garden.",
+        "Experience the unique hill climbing train (funicular) to visit the Debay Ancient Wine Cellar and the beautiful Le Jardin D’amour flower garden.",
+        "Walk on the famous Golden Bridge, an architectural marvel held by giant stone hands, offering gorgeous views of Da Nang City.",
+        "Afternoon: Enjoy free time at Fantasy Park, Vietnam's third-largest indoor games zone, with attractions like 4-5D films, skiver, and The Death Race.",
+        "17:00: Depart from Ba Na Hills and head to your hotel in Hoi An to check in for the evening."
       ],
-      inclusions: ["Private Car", "Local English-speaking guide", "Entrance fee", "Cable car", "Meals: B", "Hotel in Hoian"],
-      imageUrl: "https://images.pexels.com/photos/15600183/pexels-photo-15600183/free-photo-of-the-golden-bridge-in-ba-na-hills-vietnam.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-      coords: [15.8851, 108.338],
-      isHighlight: true,
+      inclusions: ["Private Car", "Local English-speaking guide", "Entrance fee & cable car", "Hotel in Hoi An"],
+      imageUrl: "https://images.pexels.com/photos/2335126/pexels-photo-2335126.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      coords: [15.9961, 107.9897],
       outfitSuggestion: {
-          title: "Mountain Layers",
-          points: [
-              "Ba Na Hills is at a high altitude and can be cool. Bring a light jacket or cardigan.",
-              "Wear your most comfortable shoes, as this day involves a lot of walking.",
-              "The weather can change quickly, so layering is the best strategy."
-          ]
+        title: "Layered & Ready for Fun",
+        points: ["The weather on the mountain can change quickly; bring a light jacket.", "Wear comfortable walking shoes for exploring.", "Don't forget your camera for the Golden Bridge!"]
       }
     },
     {
       day: 4,
-      title: "HOI AN ANCIENT TOWN - COCONUT FOREST",
+      title: "HOI AN ANCIENT TOWN & COCONUT FOREST",
       destination: "Hoi An",
       meals: "B",
-      bannerSummary: "Ancient Town & Coconut Forest Boat Trip",
+      bannerSummary: "Ancient Town Charm & Coconut Boat Adventures",
       activities: [
-        "Enjoy breakfast at the hotel and free leisure in the morning.",
-        "10:00 - 12:00: Head to Hoi An ancient town. Visit the Fukian Assembly Hall, the Japanese Covered Bridge, and walk around for shopping.",
-        "13:00 - 16:00: Transfer to Cam Thanh Village to visit the Coconut Forest.",
-        "Discover the forest eco-system by basket boats, catch crabs and snails, and make toys from coconut leaves.",
-        "Join in a basket boat race for a lot of wonderful experiences.",
-        "Overnight in Hoian.",
+        "Enjoy breakfast at the hotel with a free morning at your leisure.",
+        "10:00-12:00: Head to Hoi An ancient town. Visit the historic Fukian Assembly Hall, see the iconic Japanese Covered Bridge, and enjoy shopping amidst thousands of lanterns.",
+        "13:00-16:00: Transfer to Cam Thanh Village for an adventure in the Coconut Forest.",
+        "Explore the forest's ecosystem on traditional basket boats, try catching crabs, and even join a thrilling basket boat race.",
+        "After the tour, return to your hotel in Hoi An to enjoy the evening at your leisure.",
       ],
-      inclusions: ["Private Car", "Local English-speaking guide", "Entrance fee", "Meals: B", "Hotel in Hoi An"],
-      imageUrl: "https://images.pexels.com/photos/3620234/pexels-photo-3620234.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-      coords: [15.8801, 108.348],
+      inclusions: ["Private Car", "Local English-speaking guide", "Entrance fee", "Hotel in Hoi An"],
+      imageUrl: "https://images.pexels.com/photos/1569076/pexels-photo-1569076.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      coords: [15.8801, 108.3380],
       outfitSuggestion: {
-          title: "Riverside Casual",
-          points: [
-              "A casual, cool outfit is perfect for the warm weather in Hoi An.",
-              "A sun hat is highly recommended for both the town walk and the boat trip.",
-              "You might get splashed during the basket boat ride, so wear quick-drying clothes."
-          ]
-      }
+        title: "Casual & Camera-Ready",
+        points: ["Light, comfortable clothing for walking and the boat ride.", "Wear a hat and sunscreen.", "Keep your camera ready for the charming ancient town and coconut groves."]
+      },
     },
-    {
+     {
       day: 5,
-      title: "FLIGHT TO HA NOI – HALF DAY CITY TOUR - SAPA",
-      destination: "Hanoi & Sapa",
+      title: "FLIGHT TO HANOI – HALF DAY CITY TOUR - SAPA",
+      destination: "Hoi An -> Hanoi -> Sapa",
       meals: "B",
-      bannerSummary: "Hanoi City Tour & Overnight Bus to Sapa",
+      bannerSummary: "Flight to the Capital, City Tour & Sapa Overnight",
       activities: [
-        "2.5 hours before flight time, our driver will pick you up for your flight to Hanoi. Upon arrival, private transfer to your hotel (check-in at 14:00 PM).",
-        "15:00: Pick up for city tour. Visit Tran Quoc Pagoda and West Lake at sunset.",
-        "Explore Dong Xuan Market for shopping and discover the Old Quarter of Hanoi.",
-        "18:50: Visit the famous Train Street. Try egg coffee or fresh beer and watch the 19:00 train pass by (at your own charge).",
-        "20:00: Head back to the hotel to rest and check out.",
-        "21:00 – 21:30: Sapa night bus picks you up from the hotel for the overnight journey to Sapa (approx. 6 hours).",
+        "Morning: Transfer to Da Nang airport for your flight to Hanoi. Upon arrival, a private car will take you to your hotel to check in and relax (standard check-in is 14:00).",
+        "15:00: Your tour guide will meet you to begin your afternoon city tour.",
+        "Visit Tran Quoc Pagoda at the West Lake—the perfect spot to watch the sunset.",
+        "Continue to Dong Xuan Market for shopping and to discover the vibrant Old Quarter of Hanoi.",
+        "18:50: Visit the famous Train Street. Grab a local egg coffee or a fresh beer and take some incredible pictures on the railway tracks.",
+        "20:00: Head back to the hotel to rest for a bit and collect your luggage.",
+        "21:00-21:30: The Sapa night bus will pick you up from the hotel to begin your 6-hour journey to Sapa."
       ],
-      inclusions: ["Private Airport Transfer", "Private Car", "Meals: B", "Vip cabin bus"],
-      imageUrl: "https://images.pexels.com/photos/13015488/pexels-photo-13015488.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      inclusions: ["Private airport transfers", "Private Car for city tour", "Hotel for day use in Hanoi", "Entrance fees", "English speaking guide", "VIP Cabin Bus ticket to Sapa"],
+      imageUrl: "https://images.pexels.com/photos/3584435/pexels-photo-3584435.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
       coords: [21.0285, 105.8542],
       outfitSuggestion: {
-          title: "City to Cabin Comfort",
-          points: [
-              "Lightweight attire for the Hanoi city tour.",
-              "Change into very comfortable, loose-fitting clothes (like joggers and a hoodie) for the overnight bus to Sapa.",
-              "Keep a scarf or light jacket handy on the bus as A/C can be strong."
-          ]
-      }
+        title: "Respectful & Comfortable",
+        points: ["Wear clothes covering shoulders and knees for temple visits.", "Comfortable walking shoes are a must.", "Carry a small bag for essentials during the city tour."]
+      },
     },
     {
       day: 6,
       title: "SAPA – FANSIPAN PEAK – HANOI",
-      destination: "Sapa & Hanoi",
+      destination: "Sapa -> Hanoi",
       meals: "B",
-      bannerSummary: "Conquer Fansipan Peak, the 'Roof of Indochina'",
-      activities: [
-        "Around 02:00: Reach Sapa. Sleep on the bus until 06:00.",
-        "06:00: Private Car picks you up and takes you to Sun World park to freshen up.",
-        "07:00 - 08:30: Arrive at Fansipan cable car station. Enjoy the best view in Sapa by cable car and conquer the highest mountain top in Indochina.",
-        "12:00: Have lunch at a local restaurant (at guest's own charge).",
-        "14:00: Get the bus to come back to Ha Noi.",
-        "21:00 - 22:00: The bus arrives in Ha Noi, dropping you off at the hotel.",
-      ],
-      inclusions: ["English-speaking guide", "Entrance fee", "Cable car", "Meals: B", "Hotel in Hanoi", "VIP Sleeper Bus"],
-      imageUrl: "https://images.pexels.com/photos/11182849/pexels-photo-11182849.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-      coords: [22.3365, 103.8448],
       isHighlight: true,
-      outfitSuggestion: {
-          title: "Peak Performance Layers",
-          points: [
-              "Fansipan Peak is very high and can be cold and windy. Warm layers are essential.",
-              "A windbreaker or waterproof jacket is highly recommended.",
-              "Wear sturdy walking shoes with good grip."
-          ]
-      }
+      bannerSummary: "Conquer the 'Roof of Indochina'",
+      activities: [
+        "02:00: Arrive in Sapa. You can rest in the sleeper bus until 06:00.",
+        "06:00: A private car will pick you up and transfer you to the Sun World park area to freshen up.",
+        "07:00-08:30: After breakfast, head to the Fansipan cable car. Enjoy a stunning ride and conquer the highest mountain top in Indochina.",
+        "12:00: Lunch at a local restaurant (at your own expense).",
+        "14:00: Board the VIP sleeper bus to return to Hanoi.",
+        "21:00-22:00: Arrive in Hanoi and transfer to your hotel for check-in.",
+      ],
+      inclusions: [
+        "English speaking guide",
+        "Entrance fee & Fansipan cable car ticket",
+        "Private transfer in Sapa",
+        "Breakfast",
+        "VIP Sleeper Bus ticket to Hanoi",
+        "Hotel in Hanoi",
+      ],
+      imageUrl: "https://images.pexels.com/photos/14772841/pexels-photo-14772841.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      coords: [22.3036, 103.774],
     },
     {
       day: 7,
       title: "HA NOI – NINH BINH – HOA LU – TAM COC – MUA CAVE",
-      destination: "Ninh Binh",
+      destination: "Hanoi -> Ninh Binh",
       meals: "B, L",
-      bannerSummary: "Ninh Binh Day Trip: Tam Coc & Mua Cave",
+      isHighlight: true,
+      bannerSummary: "Ancient Capital, Bamboo Boats & Dragon Peak Views",
       activities: [
-        "07:25 – 8h00: Get picked up by our guide to depart for Ninh Binh province.",
-        "09:15: Have a short 15-20 minute break to relax.",
-        "10:15: Visit Hoa Lu ancient capital. Go cycling around the village for sightseeing and discovering local life.",
-        "12:00: Have a buffet lunch at a 5-star style restaurant with many local foods options.",
-        "13:30: Visit Tam Coc by a 1.5-hour bamboo boat. Enjoy the charming beauty of paddy fields, river, and a stunning cave system.",
+        "07:25–8:00: Get picked up by our friendly guide then depart for Ninh Binh province.",
+        "09:15: Have a short break for 15 – 20 minutes to relax.",
+        "10:15: Visit Hoa Lu ancient capital to learn about Vietnamese history, followed by cycling around the village for sightseeing.",
+        "12:00: Enjoy a buffet lunch at a 5-star style restaurant with many local food options.",
+        "13:30: Visit Tam Coc by 1.5-hour bamboo boat. Be amazed by the beauty of the paddy fields, river, and stunning cave system, often called 'Ha Long Bay on land'.",
         "15:30: Leave for Mua Cave (Dragon Peak). Walk up almost 500 steps to reach the top for an amazing panoramic view of Tam Coc.",
         "17:00: Get on the bus to return to Hanoi.",
-        "19:00: Get dropped off at Hotels in Hanoi.",
+        "19:00: Get dropped off at your hotel in Hanoi."
       ],
-      inclusions: ["Shuttle transfer", "Local English-speaking guide", "Entrance fee", "Meals: B/L", "Hotel in Ha Noi"],
-      imageUrl: "https://images.pexels.com/photos/14838575/pexels-photo-14838575.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-      coords: [20.2550, 105.9745],
+      inclusions: ["Shuttle transfer", "Local English-speaking guide", "Entrance fees & boat trip", "Buffet Lunch", "Hotel in Hanoi"],
+      imageUrl: "https://images.pexels.com/photos/5431358/pexels-photo-5431358.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      coords: [20.215, 105.936],
       outfitSuggestion: {
-          title: "Active Adventurer",
-          points: [
-              "Sporty, breathable clothes are ideal for this active day of cycling and climbing.",
-              "Wear excellent walking shoes for the ~500 steps up Mua Cave.",
-              "Don't forget sun protection: a hat, sunglasses, and sunscreen are a must."
-          ]
-      }
+        title: "Active & Comfortable",
+        points: ["Wear light, breathable clothes for cycling.", "Sturdy shoes are essential for climbing Mua Cave.", "Bring a hat, sunglasses, and sunscreen for sun protection."]
+      },
     },
     {
       day: 8,
       title: "HANOI – HALONG BAY LUXURY DAY CRUISE",
-      destination: "Halong Bay",
+      destination: "Hanoi -> Halong Bay",
       meals: "B, L",
-      bannerSummary: "Luxury Day Cruise in Halong Bay",
-      activities: [
-        "08:00 AM: Pick up from your hotel and leave for Ha Long Bay.",
-        "12:00: Arrive at Tuan Chau Harbor and get on the boat to start the excursion.",
-        "12:30: Enjoy a set menu lunch while cruising past Fighting Chicken and Incense Buner Islets.",
-        "14.00: Arrive at Bo Hon Island and visit Sung Sot Cave – the most beautiful cave in Halong.",
-        "14.45: Do kayaking or take a bamboo boat through Luon Cave to discover a beautiful lagoon.",
-        "15.15: Visit TiTop Island for swimming or trekking to the top for sightseeing all of Halong bay.",
-        "16.00: Return to the boat for a sunset party with wine, fruits, and biscuits.",
-        "17.45: Arrive back at the harbor and get on the bus to return to Hanoi.",
-        "20:30: Get dropped off at the hotel. Tour ends.",
-      ],
-      inclusions: ["Hotel in Hanoi", "Shuttle transfer Halong Bay - Hanoi", "Local English-speaking guide in Halong cruise", "Entrance fee", "Kayaking", "Sunset party", "Meals: B/L"],
-      imageUrl: "https://images.pexels.com/photos/3225531/pexels-photo-3225531.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-      coords: [20.9101, 107.0760],
       isHighlight: true,
+      bannerSummary: "Luxury Cruise in a World Heritage Site",
+      activities: [
+          "08:00: After breakfast, leave for Ha Long Bay.",
+          "12:00: Arrive at Tuan Chau Harbor, get on the boat to start the excursion discovering the beauty of the world heritage site.",
+          "12:30: Enjoy set menu lunch on the boat. See the beautiful scenery with thousands of limestones such as Fighting Chicken and Incense Burner Islets – 2 symbols of Halong Bay.",
+          "14:00: Arrive at Bo Hon Island and visit Sung Sot Cave – the most beautiful cave with a lot of stalagmites and stalactites.",
+          "14:45: Do kayaking or bamboo boat through Luon Cave to discover the beautiful lagoon.",
+          "15:15: Visit TiTop Island with its sandy beach. You can go swimming here or trek up to the top of the island for a panoramic view of Halong bay.",
+          "16:00: Back to the boat for the sunset party (wine, fruits, and biscuits) while cruising back to the harbor.",
+          "17:45: Arrive back at the harbor. Get on the bus and return to Hanoi.",
+          "20:30: Get dropped off at the hotel. Tour ends for the day."
+      ],
+      inclusions: [
+          "Hotel in Hanoi",
+          "Shuttle transfer Halong Bay - Hanoi",
+          "Local English-speaking guide in Halong cruise",
+          "Entrance fee, Kayaking, sunset party",
+      ],
+      imageUrl: "https://images.pexels.com/photos/2422588/pexels-photo-2422588.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      coords: [20.9101, 107.0765],
       outfitSuggestion: {
-          title: "Nautical Style",
-          points: [
-              "Bring your swimsuit if you plan to swim at TiTop Island.",
-              "Wear comfortable boat-friendly shoes (non-slip sandals or sneakers).",
-              "A light jacket or wrap is great for the evening breeze during the sunset party."
-          ]
+        title: "Cruise & Cave Ready",
+        points: ["Wear a swimsuit under your clothes for easy swimming access.", "Bring comfortable shoes for trekking on TiTop Island.", "A waterproof bag for your phone/camera is a good idea."]
       }
     },
     {
@@ -241,146 +217,90 @@ export const TRIP_DATA: TripData = {
       title: "HANOI DEPARTURE",
       destination: "Hanoi",
       meals: "B",
-      bannerSummary: "Departure from Hanoi",
+      bannerSummary: "Time to Say 'Tạm biệt!'",
       activities: [
-        "Have breakfast at the hotel. Free on your own and check out.",
-        "3.5 hours before your international flight, our driver will pick you up and transfer to the airport for the flight from HANOI city to India.",
-        "Hope you enjoyed the trip in Vietnam with sweet memories!",
+          "Enjoy your final breakfast in Vietnam.",
+          "Free on your own until check out.",
+          "3.5 hours before your international flight departure, our driver will pick you up at the hotel and transfer to the airport.",
+          "Hope you enjoyed the trip in Vietnam with sweet memories!",
       ],
-      inclusions: ["Private airport transfer", "Meals: B"],
-      imageUrl: "https://images.pexels.com/photos/1048238/pexels-photo-1048238.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-      coords: [21.0285, 105.8642],
-      outfitSuggestion: {
-          title: "Homeward Bound Comfort",
-          points: [
-              "Choose a comfortable outfit for your flight back home.",
-              "Depending on your plans before checkout, wear something suitable for last-minute souvenir shopping or a final Vietnamese coffee."
-          ]
-      }
+      inclusions: ["Private airport transfer"],
+      imageUrl: "https://images.pexels.com/photos/358220/pexels-photo-358220.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      coords: [21.0285, 105.8542]
     },
   ],
   accommodation: {
-    category: "3 STAR",
+    category: "4 STAR",
     hotels: [
-      { 
-        city: "HO CHI MINH CITY", 
-        name: "KT MERAKI BOUTIQUE", 
-        dates: "13 Nov 2025",
-        nights: "Day Use",
-        rooms: "For freshening up until check-out",
-        bookingUrl: "https://www.booking.com/Share-flBqOJ",
-        coversDays: "Covers Day 1 itinerary (day use)"
-      },
-       { 
-        city: "DA NANG", 
-        name: "Sekong Hotel Da Nang", 
-        dates: "13 Nov – 15 Nov 2025",
-        nights: "2 nights",
-        rooms: "3 Double/Twin rooms for 6 pax",
-        bookingUrl: "https://www.booking.com/Share-Nq5s57",
-        coversDays: "Covers Day 1 & Day 2 itinerary"
-      },
-      { 
-        city: "HOI AN", 
-        name: "Thanh Van 1 Hotel", 
-        dates: "15 Nov – 17 Nov 2025",
-        nights: "2 nights",
-        rooms: "3 Double/Twin rooms for 6 pax",
-        bookingUrl: "https://www.booking.com/Share-ZpiOo9n",
-        coversDays: "Covers Day 3 & Day 4 itinerary"
-      },
-      { 
-        city: "HANOI (Old Quarter)", 
-        name: "Dream Boutique Hotel and Travel", 
-        dates: "17 Nov – 21 Nov 2025",
-        nights: "4 nights total",
-        rooms: "Variable",
-        bookingUrl: "https://www.booking.com/hotel/vn/dream-boutique-and-spa.html",
-        coversDays: "Covers Day 5, 6, 7 & 8 itinerary",
-        notes: "On 17th Nov, a family room is available for day use before the overnight trip to Sapa."
-      },
+      { city: "Ho Chi Minh", name: "Silverland Sakyo Hotel & Spa", bookingUrl: "https://www.google.com/travel/hotels/s/1Y8zX4iG9uEw3C657", dates: "Day 1", nights: "Day Use", rooms: "02 Deluxe rooms", coversDays: "Day 1", notes: "For early check-in and freshening up before the tour." },
+      { city: "Da Nang", name: "Minh Toan Galaxy Hotel", bookingUrl: "https://www.google.com/travel/hotels/s/2bH6TqU7y9b4tWw9A", dates: "Day 1-2", nights: "1 Night", rooms: "02 Deluxe + 01 Family room", coversDays: "Day 1" },
+      { city: "Hoi An", name: "Hoi An Delicacy Hotel & Spa", bookingUrl: "https://www.google.com/travel/hotels/s/h7N1S6Z8t7g9kG8g7", dates: "Day 2-4", nights: "2 Nights", rooms: "02 Deluxe + 01 Family room", coversDays: "Day 2, 3" },
+      { city: "Hanoi", name: "Hanoi Pearl Hotel", bookingUrl: "https://www.google.com/travel/hotels/s/cW2tWd4L3JjK6XF26", dates: "Day 5", nights: "Day Use", rooms: "02 Deluxe + 01 Family room", coversDays: "Day 5", notes: "For resting and freshening up before the overnight bus to Sapa." },
+      { city: "Hanoi", name: "Hanoi Pearl Hotel", bookingUrl: "https://www.google.com/travel/hotels/s/cW2tWd4L3JjK6XF26", dates: "Day 6-9", nights: "3 Nights", rooms: "02 Deluxe + 01 Family room", coversDays: "Day 6, 7, 8" },
     ],
   },
   tourCost: {
-    category: "06 Adults",
+    category: "6 Adults",
     costs: [
-      { description: "Hotel 3 star + Land tour (Mixed tour)", price: "636 USD / Person" },
-      { description: "Land tour only", price: "460 USD / Person" },
+      { description: "Tour Price per Person", price: "$750 USD" },
+      { description: "Total Tour Price for 6 Guests", price: "$4,500 USD" },
     ],
   },
   generalInclusionsExclusions: {
     inclusions: [
-      "Hotel accommodation (double/twin/triple sharing) with daily breakfast.",
-      "Private airport transfers with A/C.",
-      "A/C shuttle bus for joining group tours (if mentioned as SIC).",
-      "Private transfers for private tours.",
-      "Meals as indicated in the program (B/L/D).",
-      "Complimentary Mineral Water (01-02 bottles/guest/day).",
-      "Entrance fees, boat trips, and excursions.",
-      "Excellent local English-speaking guide on-site for group tours.",
+      "Accommodation in twin/double/triple sharing rooms",
+      "All transfers and transportation with air-conditioning",
+      "All entrance fees as mentioned in the itinerary",
+      "Meals as specified (B=Breakfast, L=Lunch, D=Dinner)",
+      "English speaking guides in each region",
+      "Domestic flight tickets (Ho Chi Minh to Danang, Danang to Hanoi)",
+      "Overnight VIP bus tickets (Hanoi to Sapa round trip)",
+      "Cold water and tissues in the car",
     ],
     exclusions: [
-      "Visa Service.",
-      "GST and TCS tax.",
-      "International and airport tax.",
-      "Meals not mentioned in the program.",
-      "Beverages and personal expenses.",
-      "Travel Insurance.",
-      "Tipping for tour guide, driver, servers, porters.",
-      "Single Supplement, early check-in/late check-out, and hotel/room upgrades (unless mentioned).",
-      "Peak season or special event rates: Xmas, New Year, Tet Holiday (Lunar New Year), and National Holidays.",
-      "Any other items not specified.",
+      "International flight tickets to/from Vietnam",
+      "Vietnam visa fees",
+      "Personal expenses (laundry, phone calls, etc.)",
+      "Travel insurance",
+      "Tips for guides and drivers",
+      "Drinks and other meals not mentioned",
+      "Any other services not clearly mentioned in the inclusions",
     ],
   },
   termsAndConditions: {
     paymentTerm: {
-      deposit: "50% of tour cost required after booking confirmation.",
-      balance: "To be collected at the hotel on the arrival day.",
+      deposit: "50% of total tour cost required to confirm the booking.",
+      balance: "Remaining 50% to be paid 30 days before the travel date.",
     },
     cancellationPolicy: {
       title: "Cancellation Policy",
       policies: [
-        "Flights: All flights are non-refundable.",
-        "60 days prior to arrival: No cancellation charge (100% Money Back Guarantee, excluding non-refundable flights).",
-        "59 - 30 days prior to arrival: 10% cancellation charge.",
-        "29 - 15 days prior to arrival: 20% cancellation charge.",
-        "14 - 8 days prior to arrival: 50% cancellation charge.",
-        "7 days prior to arrival: 100% cancellation charge.",
-        "No show: 100% cancellation charge.",
-      ]
+        "More than 30 days prior to departure: 25% of total cost.",
+        "Between 15-30 days prior to departure: 50% of total cost.",
+        "Less than 15 days prior to departure: 100% of total cost (no refund).",
+      ],
     },
     importantNotes: [
-      "Visa: Vietnam Online Visa is required to be done in advance.",
-      "International Flights: To be booked by the clients.",
-      "Prices are subject to availability at the time of booking.",
-      "Reservations during peak times (Christmas, New Year, Vietnamese Luna New Year, and National Holidays) and other local special events may be subject to supplementary charges.",
-      "Hotel Check-in: 14:00 PM on arrival day.",
-      "Hotel Check-out: 12:00 PM on departure day. (Surcharges apply for early check-in or late check-out).",
-      "All services & tours are not booked until confirmation is received.",
-      "If a proposed service is not available at the booking time, alternative options will be advised.",
+      "The itinerary is subject to change due to weather, traffic conditions, or other unforeseen circumstances.",
+      "Hotel check-in time is 14:00 and check-out time is 12:00.",
+      "Please ensure you have a valid passport with at least 6 months validity from your date of entry.",
     ],
   },
-  flightData: [
+   flightData: [
     {
       route: "Mumbai to Ho Chi Minh",
-      tickets: [
-        { passengers: "Kunjan", url: "https://drive.google.com/file/d/1IO9-Yqm1nbSFy9OnAV0V5tq6ObL-szS7/view?usp=drive_link" },
-        { passengers: "Sneha, Shilpa & Raj", url: "https://drive.google.com/file/d/1t8PV0ztFboR6xncE8DUZxerUK7tmoGRh/view?usp=drive_link" },
-      ]
+      url: "https://drive.google.com/drive/folders/1LUhNq5kd-ZFny6hqBGYD6HnlJR_3VxO0?usp=drive_link"
     },
     {
       route: "Hanoi to Mumbai",
-      tickets: [
-        { passengers: "Akshay, Kunjan & Rahul", url: "https://drive.google.com/file/d/1KKAvEuYenBA0LCaqCaxl5vjnjWLeT1VA/view?usp=drive_link" },
-        { passengers: "Sneha, Shilpa & Raj", url: "https://drive.google.com/file/d/1KKAvEuYenBA0LCaqCaxl5vjnjWLeT1VA/view?usp=drive_link" },
-      ]
+      url: "https://drive.google.com/drive/folders/1Nun5qVqM9cIlzfNrDi1RgzP0Uno-eUK4?usp=drive_link"
     }
   ],
   visaData: [
-    { name: "Kunjan", url: "#" },
-    { name: "Akshay", url: "#" },
-    { name: "Rahul", url: "#" },
-    { name: "Sneha", url: "#" },
-    { name: "Raj", url: "#" },
-  ],
+    { name: "Akshay", url: "https://drive.google.com/file/d/1ygQ6vb_sO-qxOuCCltCrgGppaASwGCpG/view?usp=drive_link" },
+    { name: "Raj", url: "https://drive.google.com/file/d/1N0HAaK67W3VxMW1PgbzwP1F1bn9T-VAs/view?usp=drive_link" },
+    { name: "Rahul", url: "https://drive.google.com/file/d/1PgXZKVZ1Wq1jxwwCyQhhkLIbzWeFuv42/view?usp=drive_link" },
+    { name: "Sneha", url: "https://drive.google.com/file/d/1F-VGBfLpP25iD4iVi1LzGW9UcaEL34ak/view?usp=drive_link" },
+    { name: "Kunjan", url: "https://drive.google.com/file/d/1J1HorsycduguQ2Ma1nZYTy2fKYNKWn69/view?usp=drive_link" },
+  ]
 };

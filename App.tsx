@@ -1,3 +1,5 @@
+
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import L from 'leaflet';
 import { TRIP_DATA, CURRENCY_RATES } from './constants';
@@ -58,6 +60,46 @@ const numberToWords = (num: number, currency: string): string => {
     
     return (words.trim() + ' ' + currencyName).trim();
 };
+
+const parseActivity = (activity: string): { time: string | null; description: string; places: string[] } => {
+    const timeMatch = activity.match(/^(\d{1,2}:\d{2}[^:]*?):/);
+    const time = timeMatch ? timeMatch[1].trim() : null;
+    const description = time ? activity.replace(timeMatch[0], '').trim() : activity;
+
+    const placesToHighlight: string[] = [
+        'Thien Hau Pagoda in China Town',
+        'Bitexco Financial Tower',
+        'Bui Vien walking street',
+        'Dinner cruise',
+        'Golden Bridge',
+        "Le Jardin D’amour flower garden",
+        'Fukian Assembly Hall', 'Japanese Covered Bridge',
+        'Hoa Lu ancient capital',
+        'Non Nuoc Village', 'Marble Mountains', 'My Son Sanctuary', 'Champa Kingdom', 'Apsara dance',
+        'Vong Nguyet hills', 'Linh Ung pagoda', 'The Old Villas of French', 'Nui Chua Mountain', 'Nghinh Phong top', 'Le Nim Villas', 'Orchid Garden', 'Debay Ancient Wine Cellar', 'Fantasy Park',
+        'Hoi An ancient town', 'Cam Thanh Village', 'Coconut Forest', 'basket boats',
+        'Tran Quoc Pagoda', 'West Lake', 'Dong Xuan Market', 'Old Quarter of Hanoi', 'Train Street',
+        'Sun World park', 'Fansipan cable car', 'highest mountain top in Indochina',
+        'Tam Coc', 'Mua Cave', 'Dragon Peak',
+        'Tuan Chau Harbor', 'Fighting Chicken', 'Incense Burner Islets', 'Bo Hon Island', 'Sung Sot Cave', 'Luon Cave', 'TiTop Island', 'kayaking or bamboo boat', 'sunset party',
+        'Ba Na Hills',
+        'cycling around the village', 'bamboo boat', 'Tam Coc by 1.5-hour bamboo boat'
+    ];
+    
+    placesToHighlight.sort((a, b) => b.length - a.length);
+
+    const foundPlaces = new Set<string>();
+
+    placesToHighlight.forEach(p => {
+        const regex = new RegExp(p.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1"), 'i');
+        if (description.match(regex)) {
+            foundPlaces.add(p);
+        }
+    });
+
+    return { time, description, places: Array.from(foundPlaces) };
+};
+
 
 // --- ANIMATION WRAPPER ---
 const AnimatedSection: React.FC<{ children: React.ReactNode; className?: string; animationType?: 'fade-in-up' | 'flip-in'; delay?: number }> = ({ children, className, animationType = 'fade-in-up', delay = 0 }) => {
@@ -200,7 +242,7 @@ const getActivityVisuals = (activity: string) => {
     if (lower.includes('my son sanctuary')) return { type: 'HIGHLIGHT', icon: <PagodaIcon/>, title: 'My Son Sanctuary (World Heritage)' };
     if (lower.includes('golden bridge')) return { type: 'HIGHLIGHT', icon: <LandmarkIcon/>, title: 'Iconic: Golden Bridge Walk' };
     if (lower.includes('coconut forest')) return { type: 'HIGHLIGHT', icon: <BoatIcon/>, title: 'Basket Boat Trip in Coconut Forest' };
-    if (lower.includes('fansipan peak')) return { type: 'HIGHLIGHT', icon: <MountainIcon/>, title: 'Fansipan Peak via Cable Car' };
+    if (lower.includes('fansipan') || lower.includes('highest mountain top in indochina')) return { type: 'HIGHLIGHT', icon: <MountainIcon/>, title: 'Fansipan Peak via Cable Car' };
     if (lower.includes('halong bay luxury day cruise')) return { type: 'HIGHLIGHT', icon: <BoatIcon/>, title: 'Halong Bay Luxury Day Cruise' };
 
     if (lower.includes('hotel') || lower.includes('check-in') || lower.includes('overnight')) return { type: 'TRANSITION', icon: <BuildingOfficeIcon /> };
@@ -209,7 +251,7 @@ const getActivityVisuals = (activity: string) => {
     if (lower.includes('car') || lower.includes('bus') || lower.includes('pickup') || lower.includes('transfer to')) return { type: 'TRANSITION', icon: <CarIcon/> };
 
     let icon = <LandmarkIcon />;
-    if (lower.includes('pagoda')) icon = <PagodaIcon />;
+    if (lower.includes('pagoda') || lower.includes('hoa lu')) icon = <PagodaIcon />;
     else if (lower.includes('train street')) icon = <TrainIcon />;
     else if (lower.includes('cycling')) icon = <CyclingIcon />;
     else if (lower.includes('cruise') || lower.includes('boat')) icon = <BoatIcon />;
@@ -295,7 +337,7 @@ const InteractiveMap: React.FC<{
                 mapRef.current = null;
             }
         };
-    }, []); 
+    }, [dayPlans, onMarkerClick]); 
 
     // Effect for handling updates when `openDay` changes.
     useEffect(() => {
@@ -414,132 +456,88 @@ const Section: React.FC<{ mainTitle: string; scriptTitle: string; icon: React.Re
     </div>
 );
 
-const TimelineItem: React.FC<{ activity: string; index: number; isOpen: boolean, isLast: boolean }> = ({ activity, index, isOpen, isLast }) => {
-    const timeMatch = activity.match(/^(\d{1,2}:\d{2}[^:]*?):/);
-    const time = timeMatch ? timeMatch[1].trim() : null;
-    const description = time ? activity.replace(timeMatch[0], '').trim() : activity;
-    const visualInfo = getActivityVisuals(activity);
-
-    let timelineElement: React.ReactNode;
-    let contentContainer: React.ReactNode;
-    const isTransition = visualInfo.type === 'TRANSITION';
-
-    const baseCardClass = "w-full transition-all duration-500 transform relative";
-    const baseIconHolderClass = "z-10 w-12 h-12 rounded-full flex items-center justify-center bg-brand-sand/80 backdrop-blur-sm shadow-md border-2 border-white";
-
-    switch (visualInfo.type) {
-        case 'MAJOR_TRAVEL':
-            timelineElement = (
-                 <div className={`${baseIconHolderClass} border-amber-300`}>
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center bg-amber-200 text-amber-800 shadow-inner">
-                        {React.cloneElement(visualInfo.icon, { className: "w-5 h-5" })}
-                    </div>
-                </div>
-            );
-            contentContainer = (
-                 <div className={`${baseCardClass} bg-amber-100 rounded-lg shadow-lg transform -rotate-2`}>
-                    {/* Luggage Tag design */}
-                    <div className="relative p-4 border-l-8 border-dashed border-amber-300/80">
-                         <div className="absolute top-1/2 -left-3 -translate-y-1/2 w-6 h-6 rounded-full bg-white border-4 border-amber-200 ring-2 ring-amber-100"></div>
-                        <div className="flex flex-col sm:flex-row sm:items-baseline ml-4 gap-x-3">
-                            <h5 className="font-bold font-sans text-amber-800 uppercase text-xs tracking-wider mb-1 sm:mb-0 sm:flex-shrink-0">{visualInfo.details}</h5>
-                            <p className="text-gray-700 text-sm">{description}</p>
-                        </div>
-                    </div>
-                </div>
-            );
-            break;
-
-        case 'HIGHLIGHT':
-            timelineElement = (
-                <div className={`${baseIconHolderClass} border-brand-sun`}>
-                    <span className="absolute flex h-full w-full">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-sun opacity-75"></span>
-                    </span>
-                    <div className="relative w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-brand-sun to-yellow-400 text-brand-jungle shadow-lg">
-                        <StarIcon className="w-6 h-6" />
-                    </div>
-                </div>
-            );
-            contentContainer = (
-                 <div className={`${baseCardClass} bg-white rounded-lg shadow-xl transform rotate-2`}>
-                    <div className="absolute -top-1 -left-1 w-12 h-12 bg-brand-sun rounded-tl-lg rounded-br-2xl flex items-center justify-center text-brand-jungle shadow-md z-10">
-                        {React.cloneElement(visualInfo.icon, { className: "w-7 h-7" })}
-                    </div>
-                    <div className="p-4 pl-16">
-                         <h5 className="font-handwriting text-brand-charcoal text-2xl">{visualInfo.title}</h5>
-                         <p className="text-gray-500 mt-1 text-xs leading-tight font-sans">{description}</p>
-                    </div>
-                </div>
-            );
-            break;
-
-        case 'TRANSITION':
-            timelineElement = (
-                <div className="z-10 w-12 h-12 flex items-center justify-center">
-                    <div className="w-2.5 h-2.5 bg-gray-300 rounded-full border-2 border-white shadow-sm"></div>
-                </div>
-            );
-            contentContainer = (
-                 <div className="flex items-center h-12 -mt-6">
-                    <p className="text-gray-500 text-sm italic tracking-wide">{description}</p>
-                </div>
-            );
-            break;
-
-        default: // ACTIVITY
-             const colors = [
-                { border: 'border-red-300', bg: 'bg-red-100/70', text: 'text-red-700' },
-                { border: 'border-blue-300', bg: 'bg-blue-100/70', text: 'text-blue-700' },
-                { border: 'border-green-300', bg: 'bg-green-100/70', text: 'text-green-700' },
-            ];
-            const color = colors[index % colors.length];
-            const rotation = ['-rotate-2', 'rotate-1', '-rotate-1'][index % 3];
-
-            timelineElement = (
-                 <div className={`${baseIconHolderClass}`}>
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center bg-white ${color.text} shadow-inner`}>
-                        {React.cloneElement(visualInfo.icon, { className: "w-5 h-5" })}
-                    </div>
-                </div>
-            );
-            contentContainer = (
-                 <div className={`${baseCardClass} ${color.bg} p-4 rounded-lg shadow-lg transform ${rotation} border-t-4 ${color.border}`}>
-                     <div className="flex items-center">
-                        <div>
-                            {time && <p className={`text-xs font-bold ${color.text} mb-1`}>{time.split('-')[0]}</p>}
-                            <p className="text-gray-700 text-sm">{description}</p>
-                        </div>
-                     </div>
-                </div>
-            );
-            break;
+const HighlightedDescription: React.FC<{ text: string; highlights: string[] }> = ({ text, highlights }) => {
+    if (!highlights || highlights.length === 0) {
+        return <>{text}</>;
     }
-    
-    const wrapperClasses = `flex min-h-[6rem] ${isTransition ? 'min-h-[3.5rem]' : ''}`;
-    const contentWrapperClasses = `flex-grow ${isTransition ? 'pt-0' : 'pt-2 pb-8'} w-full flex items-center transform ${isOpen ? 'animate-place-in' : 'opacity-0'}`;
+
+    const sortedHighlights = [...highlights].sort((a, b) => b.length - a.length);
+    const regex = new RegExp(`(${sortedHighlights.map(h => h.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')).join('|')})`, 'gi');
+    const parts = text.split(regex);
 
     return (
-        <div className={wrapperClasses}>
-             <div className="flex flex-col items-center mr-4">
-                <div 
-                    className={`transition-opacity duration-300 ${isOpen ? 'animate-pop-in' : 'opacity-0'}`}
+        <>
+            {parts.map((part, index) => 
+                sortedHighlights.some(h => h.toLowerCase() === part.toLowerCase()) ? (
+                    <strong key={index} className="font-semibold text-brand-charcoal">{part}</strong>
+                ) : (
+                    part
+                )
+            )}
+        </>
+    );
+};
+
+const TimelineItem: React.FC<{ activity: string; index: number; isOpen: boolean, isLast: boolean }> = ({ activity, index, isOpen, isLast }) => {
+    const { time, description, places } = parseActivity(activity);
+    const hasPlaces = places.length > 0;
+
+    return (
+        <div className="flex items-start">
+            {/* Timeline Decoration */}
+            <div className="flex flex-col items-center mr-4 flex-shrink-0">
+                <div
+                    className={`z-10 w-12 h-12 rounded-full flex items-center justify-center bg-brand-sand/80 backdrop-blur-sm shadow-md border-2 border-white transition-all duration-300 ${isOpen ? 'animate-pop-in' : 'opacity-0 scale-50'}`}
                     style={{ animationDelay: `${isOpen ? index * 80 : 0}ms` }}
                 >
-                    {timelineElement}
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center bg-white text-brand-jungle shadow-inner">
+                        {getActivityVisuals(activity).icon}
+                    </div>
                 </div>
                 {!isLast && (
-                    <div 
-                        className={`w-0.5 flex-grow bg-gray-300 transition-transform duration-700 ease-out origin-top ${isOpen ? 'scale-y-100' : 'scale-y-0'}`} 
+                    <div
+                        className={`w-0.5 flex-grow bg-gray-300 transition-transform duration-700 ease-out origin-top ${isOpen ? 'scale-y-100' : 'scale-y-0'}`}
                         style={{ transitionDelay: `${isOpen ? index * 50 + 200 : 0}ms` }}
                     />
                 )}
             </div>
-            <div
-                className={contentWrapperClasses}
+            
+            {/* Content */}
+            <div 
+                className={`flex-grow pb-8 pt-2.5 transition-all duration-500 ${isOpen ? 'animate-place-in' : 'opacity-0'}`}
                 style={{ animationDelay: `${isOpen ? index * 100 + 100 : 0}ms` }}
             >
-                {contentContainer}
+                <div className={`p-4 rounded-lg shadow-lg bg-white border-t-4 border-brand-sky`}>
+                    {/* Timing Badge */}
+                    {time && (
+                        <div className="inline-flex items-center gap-1.5 bg-brand-jungle text-white text-xs font-bold px-2.5 py-1 rounded-full mb-3 -ml-1">
+                            <ClockIcon className="w-4 h-4" />
+                            <span>{time}</span>
+                        </div>
+                    )}
+                    
+                    {/* Main Content */}
+                    <div className={time ? '' : 'pt-1'}>
+                        <p className="text-gray-700 text-sm">
+                           <HighlightedDescription text={description} highlights={places} />
+                        </p>
+                    </div>
+
+                     {/* Key Locations Tags */}
+                    {hasPlaces && (
+                        <div className="mt-4 pt-3 border-t border-dashed">
+                             <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Key Locations</h4>
+                             <div className="flex flex-wrap gap-2">
+                                {places.map((place, pIndex) => (
+                                     <div key={pIndex} className="flex items-center gap-1.5 bg-brand-sand px-2 py-1 rounded-md text-sm text-brand-jungle font-semibold border">
+                                         <MapPinIcon className="w-4 h-4 text-brand-accent" />
+                                         <span>{place}</span>
+                                     </div>
+                                ))}
+                             </div>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );
@@ -563,7 +561,7 @@ const ActivityTimeline: React.FC<{ activities: string[], isOpen: boolean }> = ({
 };
 
 const LocationHeader: React.FC<{ destination: string }> = ({ destination }) => {
-    const primaryDestination = destination.split(' & ')[0];
+    const primaryDestination = destination.split(' -> ')[1] || destination.split(' & ')[0];
 
     return (
         <div className="flex items-baseline justify-center gap-2 p-2 mb-4 rounded-md bg-brand-jungle/5 border border-brand-jungle/10">
@@ -578,21 +576,23 @@ const OutfitSuggestion: React.FC<{ suggestion: DayPlan['outfitSuggestion'] }> = 
     if (!suggestion) return null;
 
     return (
-        <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-200/80">
-            <h4 className="text-lg font-bold mb-2 text-brand-charcoal flex items-center">
-                <ShirtIcon className="w-5 h-5 mr-2" />
+         <div className="bg-white rounded-lg shadow-sm border border-gray-200/80 overflow-hidden">
+            <h4 className="text-lg font-bold p-3 bg-amber-500 text-white flex items-center gap-2">
+                <ShirtIcon className="w-5 h-5" />
                 What to Wear
             </h4>
-            <div className="p-4 bg-brand-sand/70 rounded-lg border">
-                <h5 className="font-semibold text-brand-jungle">{suggestion.title}</h5>
-                <ul className="mt-2 space-y-1.5 text-sm text-gray-700">
-                    {suggestion.points.map((point, index) => (
-                        <li key={index} className="flex items-start">
-                            <span className="mr-2 mt-1 text-brand-accent">▸</span>
-                            <span>{point}</span>
-                        </li>
-                    ))}
-                </ul>
+            <div className="p-4">
+                <div className="p-3 bg-amber-50 rounded-lg border border-amber-200">
+                    <h5 className="font-semibold text-amber-800">{suggestion.title}</h5>
+                    <ul className="mt-2 space-y-1.5 text-sm text-amber-900/80">
+                        {suggestion.points.map((point, index) => (
+                            <li key={index} className="flex items-start">
+                                <span className="mr-2 mt-1 text-amber-500">▸</span>
+                                <span>{point}</span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </div>
         </div>
     );
@@ -600,16 +600,15 @@ const OutfitSuggestion: React.FC<{ suggestion: DayPlan['outfitSuggestion'] }> = 
 
 const DayUseHotelInfo: React.FC<{ hotel: HotelStay }> = ({ hotel }) => {
     return (
-        <div className="p-4 mb-6 rounded-lg bg-blue-50 border border-blue-200 flex items-start">
-            <ClockIcon className="w-8 h-8 text-blue-600 mr-4 flex-shrink-0 mt-1" />
+        <div className="p-3 mb-4 rounded-lg bg-blue-50 border border-blue-200 flex items-start">
+            <ClockIcon className="w-6 h-6 text-blue-600 mr-3 flex-shrink-0 mt-0.5" />
             <div>
                 <p className="font-bold text-blue-700 text-xs">Day Use Hotel</p>
                 <a href={hotel.bookingUrl} target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-2">
-                    <h4 className="font-sans font-bold text-lg text-brand-accent group-hover:text-brand-accent/80 transition-colors">{hotel.name}</h4>
+                    <h4 className="font-sans font-bold text-base text-brand-accent group-hover:text-brand-accent/80 transition-colors">{hotel.name}</h4>
                     <LinkIcon className="w-4 h-4 text-brand-accent/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </a>
-                <p className="text-sm text-gray-600">in {hotel.city}</p>
-                <p className="text-sm text-gray-600 mt-1">{hotel.rooms}</p>
+                <p className="text-xs text-gray-600">in {hotel.city} &bull; {hotel.rooms}</p>
             </div>
         </div>
     );
@@ -654,11 +653,11 @@ const DayAccordion: React.FC<{ dayPlan: DayPlan; isOpen: boolean; onClick: () =>
         return daysCovered ? daysCovered.includes(String(dayPlan.day)) && isDayUse : false;
     });
 
-    const highlightGlowClass = dayPlan.isHighlight ? 'shadow-[0_0_15px_3px_rgba(255,222,107,0.7)] animate-pulse-slow' : '';
+    const highlightGlowClass = dayPlan.isHighlight ? 'shadow-[0_0_0_3px_rgba(255,222,107,0.7)] animate-pulse-slow' : 'shadow-lg';
 
     return (
         <div className={`transition-all duration-500 ${isOpen ? 'pb-4' : ''}`}>
-            <div className={`p-0.5 bg-gradient-to-br from-brand-sun via-brand-accent to-brand-sky rounded-2xl transition-all duration-500 ${isOpen ? '' : 'hover:shadow-xl'} ${highlightGlowClass}`}>
+            <div className={`p-0.5 bg-gradient-to-br from-brand-sun via-brand-accent to-brand-sky rounded-2xl transition-all duration-500 ${isOpen ? 'shadow-inner' : 'hover:shadow-xl'} ${dayPlan.isHighlight ? 'shadow-[0_0_15px_rgba(255,222,107,0.7)] animate-pulse-slow' : ''}`}>
                 <button onClick={onClick} className="w-full text-left relative block group rounded-[14px] overflow-hidden" aria-expanded={isOpen}>
                     {/* Background Image & Overlay */}
                     <div className="absolute inset-0 w-full h-full overflow-hidden">
@@ -731,31 +730,37 @@ const DayAccordion: React.FC<{ dayPlan: DayPlan; isOpen: boolean; onClick: () =>
 
                         <div className="grid md:grid-cols-3 gap-6">
                             <div className="md:col-span-2">
-                                <div className="relative p-4 mb-4 rounded-lg bg-white shadow-sm border border-brand-jungle/20 overflow-hidden">
+                                 <div className="relative p-4 mb-4 rounded-lg bg-brand-jungle text-white shadow-lg">
                                     <div className="flex items-center">
-                                        <div className="p-2 bg-brand-jungle/10 rounded-full mr-4">
-                                            <ClipboardListIcon className="w-6 h-6 text-brand-jungle"/>
+                                        <div className="p-2 bg-white/20 rounded-full mr-4">
+                                            <ClipboardListIcon className="w-6 h-6 text-white"/>
                                         </div>
                                         <div>
-                                            <h4 className="text-xl font-bold text-brand-charcoal">Your Daily Mission</h4>
-                                            <p className="text-sm text-gray-500">Your objectives for today.</p>
+                                            <h4 className="text-xl font-bold">Your Daily Mission</h4>
+                                            <p className="text-sm text-white/80">Your objectives for today.</p>
                                         </div>
                                     </div>
                                 </div>
                                 <ActivityTimeline activities={dayPlan.activities} isOpen={isOpen} />
                             </div>
                             <div className="space-y-6">
-                                <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-200/80">
-                                    <h4 className="text-lg font-bold mb-2 text-brand-charcoal">Meals Included</h4>
-                                    <div className="p-3 bg-brand-sand/70 rounded-md border text-sm text-gray-600">
+                               <div className="bg-white rounded-lg shadow-sm border border-gray-200/80 overflow-hidden">
+                                    <h4 className="text-lg font-bold p-3 bg-emerald-500 text-white flex items-center gap-2">
+                                        <FoodIcon className="w-5 h-5" />
+                                        Meals Included
+                                    </h4>
+                                    <div className="p-4 text-sm text-gray-700">
                                         {meals.length > 0 && meals[0] !== 'None'
                                             ? meals.map(m => mealMap[m] || m).join(', ')
                                             : 'Meals are not included today. Time for some local food exploration!'}
                                     </div>
                                 </div>
-                                <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-200/80">
-                                    <h4 className="text-lg font-bold mb-2 text-brand-charcoal">What's Covered</h4>
-                                    <ul className="space-y-2 text-sm text-gray-700">
+                                <div className="bg-white rounded-lg shadow-sm border border-gray-200/80 overflow-hidden">
+                                    <h4 className="text-lg font-bold p-3 bg-sky-500 text-white flex items-center gap-2">
+                                        <CheckCircleIcon className="w-5 h-5"/>
+                                        What's Covered
+                                    </h4>
+                                    <ul className="p-4 space-y-2 text-sm text-gray-700">
                                         {dayPlan.inclusions.map((inclusion, index) => (
                                             <li key={index} className="flex items-start">
                                                 <CheckCircleIcon className="w-5 h-5 flex-shrink-0 mr-2 mt-0.5 text-emerald-500" />
@@ -893,18 +898,6 @@ const CurrencyConverter: React.FC = () => {
 
 
 const FlightTicketsSection: React.FC<{ flightData: FlightData; isOpen: boolean; onClose: () => void; }> = ({ flightData, isOpen, onClose }) => {
-    const [expandedRoute, setExpandedRoute] = useState<string | null>(null);
-
-    const handleRouteToggle = (route: string) => {
-        setExpandedRoute(prev => (prev === route ? null : route));
-    };
-    
-    useEffect(() => {
-        if (!isOpen) {
-            setExpandedRoute(null);
-        }
-    }, [isOpen]);
-
     return (
         <div className={`grid transition-all duration-500 ease-in-out ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
             <div className="overflow-hidden">
@@ -914,42 +907,19 @@ const FlightTicketsSection: React.FC<{ flightData: FlightData; isOpen: boolean; 
                             <XMarkIcon className="w-5 h-5" />
                         </button>
                         <h3 className="text-center font-bold font-handwriting text-brand-charcoal mb-6 text-2xl">Flight E-Tickets</h3>
-                        <div className="grid sm:grid-cols-2 gap-6">
-                            {flightData.map((routeData) => {
-                                const isRouteExpanded = expandedRoute === routeData.route;
-                                return (
-                                    <div key={routeData.route} className="flex flex-col items-center">
-                                        <button
-                                            onClick={() => handleRouteToggle(routeData.route)}
-                                            className="w-full inline-flex items-center justify-center px-5 py-2 rounded-full bg-brand-jungle text-white font-bold text-sm shadow-md border-2 border-transparent hover:bg-brand-sun hover:text-brand-jungle transform transition-all duration-300 ease-in-out hover:scale-105 active:scale-100 group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-sun"
-                                            aria-expanded={isRouteExpanded}
-                                        >
-                                            <span className="mr-2">{routeData.route}</span>
-                                            <svg
-                                                className={`w-5 h-5 opacity-80 transform transition-transform duration-300 ${isRouteExpanded ? 'rotate-180' : ''}`}
-                                                fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                            >
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                                            </svg>
-                                        </button>
-                                        <div className={`grid w-full transition-all duration-300 ease-in-out ${isRouteExpanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
-                                            <div className="overflow-hidden">
-                                                <div className="flex flex-wrap items-center justify-center gap-2 pt-4">
-                                                    {routeData.tickets.map((ticket, tIndex) => (
-                                                        <a
-                                                            key={tIndex} href={ticket.url} target="_blank" rel="noopener noreferrer"
-                                                            className="inline-flex items-center justify-center px-3 py-1.5 rounded-full bg-brand-jungle text-white font-bold text-xs shadow-md border-2 border-transparent hover:bg-brand-sun hover:text-brand-jungle transform transition-all duration-300 ease-in-out hover:scale-105 active:scale-100 group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-sun"
-                                                        >
-                                                            <TicketIcon className="mr-2 h-4 w-4 opacity-80 group-hover:text-brand-jungle transition-colors flex-shrink-0" />
-                                                            <span>{ticket.passengers}</span>
-                                                        </a>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                );
-                            })}
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                            {flightData.map((ticket, index) => (
+                                <a
+                                    key={index}
+                                    href={ticket.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="w-full sm:w-auto inline-flex items-center justify-center px-5 py-2 rounded-full bg-brand-jungle text-white font-bold text-sm shadow-md border-2 border-transparent hover:bg-brand-sun hover:text-brand-jungle transform transition-all duration-300 ease-in-out hover:scale-105 active:scale-100 group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-sun"
+                                >
+                                    <TicketIcon className="mr-2 h-4 w-4 opacity-80 group-hover:text-brand-jungle transition-colors flex-shrink-0" />
+                                    <span>{ticket.route}</span>
+                                </a>
+                            ))}
                         </div>
                     </div>
                 </div>
@@ -1253,22 +1223,24 @@ const App: React.FC = () => {
         setOpenDay(prevOpenDay => (prevOpenDay === day ? null : day));
     }, []);
 
+    // FIX: Increased the scroll timeout to fix an issue on mobile where opening an
+    // accordion would scroll to the wrong position.
     useEffect(() => {
         if (openDay === null) return;
 
         // Give the browser a moment to start the accordion animation and update the layout.
         // This prevents a race condition where we scroll to the element's position *before*
-        // the accordion has expanded.
+        // it has fully expanded. A slightly longer delay helps ensure a more accurate scroll position,
+        // especially on mobile.
         const timer = setTimeout(() => {
             const dayElement = dayRefs.current[openDay - 1];
             if (dayElement) {
-                const y = dayElement.getBoundingClientRect().top + window.scrollY - 16;
-                window.scrollTo({
-                    top: y,
+                dayElement.scrollIntoView({
                     behavior: 'smooth',
+                    block: 'start',
                 });
             }
-        }, 100); // 100ms delay is a good balance.
+        }, 300); // Increased delay for better scroll accuracy during animation.
 
         return () => clearTimeout(timer);
     }, [openDay]);
@@ -1302,11 +1274,6 @@ const App: React.FC = () => {
                             </span>
                         </div>
                     </AnimatedSection>
-                     <AnimatedSection delay={400}>
-                        <p className="text-lg md:text-xl -mt-4 text-white/90 drop-shadow">
-                            An Unforgettable Adventure
-                        </p>
-                    </AnimatedSection>
                     <AnimatedSection delay={600} className="relative mt-8">
                         <div className="flex items-center justify-center flex-wrap gap-2 sm:gap-4">
                             <button 
@@ -1323,6 +1290,15 @@ const App: React.FC = () => {
                                 <PassportIcon className="w-5 h-5 mr-2 -ml-1" />
                                 Visa
                             </button>
+                             <a
+                                href="https://drive.google.com/drive/folders/110Yw4FiZ0K6y4vPoPkHHKSv9TS0jgIFR?usp=drive_link"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center justify-center px-4 py-2 sm:px-5 sm:py-2.5 border-2 border-brand-sun text-xs sm:text-sm font-semibold rounded-full shadow-lg text-brand-sun bg-brand-jungle/50 backdrop-blur-sm hover:bg-brand-sun hover:text-brand-jungle focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-brand-sun transition-all duration-300 transform hover:scale-105 active:scale-100"
+                            >
+                                <PassportIcon className="w-5 h-5 mr-2 -ml-1" />
+                                Passports
+                            </a>
                              <a
                                 href="https://drive.google.com/drive/u/3/folders/1xs1eDOhKS9Z7GKdvtEJTkXnEEZgkNA9E"
                                 target="_blank"
@@ -1378,7 +1354,8 @@ const App: React.FC = () => {
 
                             return (
                                 <AnimatedSection key={plan.day}>
-                                    <div ref={el => dayRefs.current[index] = el}>
+                                    {/* FIX: The ref callback for a DOM element must not return a value. The assignment was wrapped in curly braces to prevent an implicit return from the arrow function, resolving the TypeScript error. */}
+                                    <div ref={el => { dayRefs.current[index] = el; }}>
                                         <DayAccordion 
                                             dayPlan={plan} 
                                             isOpen={openDay === plan.day} 
